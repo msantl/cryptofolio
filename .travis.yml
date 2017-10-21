@@ -14,7 +14,6 @@ install:
 
 before_script:
     - mysql -e 'create database CRYPTOFOLIO;'
-    - python manage.py makemigrations --noinput
     - python manage.py migrate --noinput
     - python manage.py collectstatic
 
