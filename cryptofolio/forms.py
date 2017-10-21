@@ -35,8 +35,9 @@ class UserChangeDetailsForm(forms.ModelForm):
 
 
 class UserChangeFiatForm(forms.ModelForm):
-    fiat = forms.ChoiceField(
-            choices=[(x, x) for x in models.Currency.objects.all()],
+    fiat = forms.ModelChoiceField(
+            queryset=models.Currency.objects.all(),
+            empty_label=None,
             help_text='<ul><li>Preffered currency</li></ul>')
 
     class Meta:
