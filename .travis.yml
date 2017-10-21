@@ -1,0 +1,20 @@
+language: python
+
+python:
+	- 2.7
+
+services: mysql
+
+notifications:
+	slack: crypto-folio:Fw6CHs3Dp6GkzLjxgc6GFt3M
+
+install:
+	- pip install -r requirements.txt
+
+before_script:
+	- mysql -e 'create database CRYPTOFOLIO;'
+	- python manage.py migrate --noinput
+	- python manage.py collectstatic
+
+script:
+	- python manage.py test
