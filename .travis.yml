@@ -5,13 +5,17 @@ python:
 
 services: mysql
 
+notifications:
+    email: false
+    slack: crypto-folio:N1rYn7M4HZtsJqCDfSADEN5A
+
 install:
-	- pip install -r requirements.txt
+    - pip install -r requirements.txt
 
 before_script:
-	- mysql -e 'create database CRYPTOFOLIO;'
-	- python manage.py migrate --noinput
-	- python manage.py collectstatic
+    - mysql -e 'create database CRYPTOFOLIO;'
+    - python manage.py migrate --noinput
+    - python manage.py collectstatic
 
 script:
-	- python manage.py test
+    - python manage.py test
