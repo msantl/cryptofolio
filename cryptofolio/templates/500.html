@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Cryptofolio</title>
+    </head>
+    <body>
+        <header>
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
+                <a class="navbar-brand" href="{% url 'home' %}">Cryptofolio</a>
+            </nav>
+        </header>
+        <hr>
+        <main>
+        <h2>Ooops!!</h2>
+        An unexpected error seems to have occured. Try refreshing your page.
+        </main>
+        <hr>
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="float-left">
+                    <span class="text-muted">
+                        <p class="small">
+                        Cryptofolio - your cryptocurrency portfolio! 
+                        <br />
+                        Copyright &copy; {% now "Y" %}
+                        </p>
+                    </span>
+                </div>
+                <div class="float-right">
+                    <span class="text-muted">
+                        <p class="small">
+                        Donate BTC: 1HPqNnJ5qHb3whxu78rq8EgD7xuamXvQZN
+                        <br />
+                        Donate ETH: 0xEf1211624d4BBDe02e4b0b86b9d160a917b26FDA
+                        </p>
+                    </span>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

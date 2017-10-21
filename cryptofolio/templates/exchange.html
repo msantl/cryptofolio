@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit {{ exchange.name }}{% endblock %}
+
+{% block content %}
+<div class="">
+    <h3>{{ exchange.name }}</h3>
+    <hr>
+    <form method="post">
+        {% csrf_token %}
+    
+        <div class="form-group">
+            {{ form.key.errors  }}
+            <div class="form-row">
+                <div class="col-md-2">
+                    <label for="{{ form.key.id_for_label }}">
+                        {{ form.key.label }}:
+                    </label>
+                </div>
+                <div class="col-md-8">
+                    <input 
+                        type="text" 
+                        class="form-control"
+                        id="{{ form.key.id_for_label }}" 
+                        name="{{ form.key.name }}" 
+                        value="{{ form.key.value|default_if_none:"" }}" 
+                    />
+                    {% if form.key.help_text %}
+                    <small class="form-text text-muted">
+                        {{ form.key.help_text|safe }}
+                    </small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    
+        <div class="form-group">
+            {{ form.secret.errors  }}
+            <div class="form-row">
+                <div class="col-md-2">
+                    <label for="{{ form.secret.id_for_label }}">
+                        {{ form.secret.label }}:
+                    </label>
+                </div>
+                <div class="col-md-8">
+                    <input 
+                        type="text" 
+                        class="form-control"
+                        id="{{ form.secret.id_for_label }}" 
+                        name="{{ form.secret.name }}" 
+                        value="{{ form.secret.value|default_if_none:"" }}" 
+                    />
+                    {% if form.secret.help_text %}
+                    <small class="form-text text-muted">
+                        {{ form.secret.help_text|safe }}
+                    </small>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+
+<div class="pt-2">
+    {% if balances %}
+    <table class="table table-striped">
+        <thead>
+            <tr><th>Currency</th><th>Amount</th><th>Last modified</th></tr>
+        </thead>
+        <tbody>
+            {% for balance in balances %}
+            <tr>
+                <td>{{ balance.currency  }}</td>
+                <td>{{ balance.amount| floatformat:8 }}</td>
+                <td>{{ balance.timestamp }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div
+
+{% endblock %}
+

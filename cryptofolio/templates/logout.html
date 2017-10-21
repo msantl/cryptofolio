@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Cryptofolio{% endblock %}
+
+{% block content %}
+<h3>Logged out</h3>
+<hr>
+<div>
+    <p>You have been successfully logged out.</p>
+    <p>
+        <a href="{% url 'login' %}">Log in</a> again.
+    </p>
+</div>
+{% endblock %}
+

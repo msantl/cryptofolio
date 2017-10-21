@@ -99,3 +99,15 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# sqlite
+*.sqlite
+*.sqlite3
+
+# static files
+static/
+staticfiles/
+
+# bower components
+bower_components/
+components/

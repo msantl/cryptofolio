@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ user.username }}'s cryptofolio {% endblock %}
+
+{% block content %}
+
+{% load nvd3_tags %}
+<head>
+    {% if has_data == True %}
+    {% include_chart_jscss %}
+    {% load_chart crypto_piechart.charttype crypto_piechart.chartdata crypto_piechart.chartcontainer crypto_piechart.extra %}
+    {% load_chart fiat_piechart.charttype fiat_piechart.chartdata fiat_piechart.chartcontainer fiat_piechart.extra %}
+    {% endif %}
+</head>
+<body>
+
+    {% if has_data == True %}
+    <div>
+        <h3>Total</h3>
+        <form method="post" action='/refreshBalances/' class="form-inline">
+            {% csrf_token %}
+            <div class="p-3">
+                {{ fiat_sum|floatformat:-8 }} {{ fiat }}
+            </div>
+            <button type="submit" class="btn btn-success">Refresh</button>
+        </form>
+    </div>
+    <hr>
+
+    <div>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Currency</th>
+                    <th>Amount</th>
+                    <th>Amount in {{ fiat }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for balance in balances|dictsortreversed:"amount_fiat" %}
+                <tr>
+                    <td>{{ balance.currency }}</td>
+                    <td>{{ balance.amount|floatformat:-8 }}</td>
+                    <td>{{ balance.amount_fiat|floatformat:-8 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h3>Balances in {{ fiat }}</h3>
+        {% include_container fiat_piechart.chartcontainer 400 '100%' %}
+    </div>
+    <hr>
+
+    <div>
+        <h3>Balances</h3>
+        {% include_container crypto_piechart.chartcontainer 400 '100%' %}
+    </div>
+
+    {% else %}
+    <p>Nothing to show :(</p>
+    <p>Please add API keys and secrets in settings!</p>
+    {% endif %}
+</body>
+
+{% endblock %}
+

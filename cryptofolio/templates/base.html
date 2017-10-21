@@ -1,0 +1,79 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}">
+        <link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}"/>
+        <title>{% block title %}Cryptofolio{% endblock %}</title>
+    </head>
+    <body>
+        <header>
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
+                <a class="navbar-brand" href="{% url 'home' %}">
+                    <img src="{% static 'favicon.png' %}" 
+                        height="35"
+                        class="d-inline-block align-top"
+                        alt="Cryptofolio"
+                    />
+                    Cryptofolio
+                </a>
+                <ul class="navbar-nav">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'settings' %}">settings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">logout</a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">login</a>
+                    </li>
+                    {% endif %}
+                </ul>
+			</nav>
+        </header>
+        <hr>
+        <main>
+        <div class="container-fluid" style="width: 800px">
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% block content %}
+            {% endblock %}
+        </div>
+        </main>
+        <hr>
+        <footer class="footer">
+            <div class="container-fluid">
+                <div class="float-left">
+                    <span class="text-muted">
+                        <p class="small">
+                            Cryptofolio - your cryptocurrency portfolio! 
+                            <br />
+                            Copyright &copy; {% now "Y" %}
+                        </p>
+                    </span>
+                </div>
+                <div class="float-right">
+                    <span class="text-muted">
+                        <p class="small">
+                            Donate BTC: 1HPqNnJ5qHb3whxu78rq8EgD7xuamXvQZN
+                            <br />
+                            Donate ETH: 0xEf1211624d4BBDe02e4b0b86b9d160a917b26FDA
+                        </p>
+                    </span>
+                </div>
+            </div>
+        </footer>
+        <script src="{% static 'jquery/jquery-3.2.1.min.js' %}"></script>
+        <script src="{% static 'popper.js/dist/umd/popper.js' %}"></script>
+        <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+    </body>
+</html>

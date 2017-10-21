@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+
+<body>
+    <h3>Exchange settings</h3>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="list-group">
+                {% for exchange in exchanges %}
+                <a
+                 class="list-group-item list-group-item-action"
+                 href="{% url 'exchange' exchange.name %}">
+                    {{exchange.name}}
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <hr>
+
+    <h3>User settings</h3>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="list-group">
+                <a
+                 class="list-group-item list-group-item-action"
+                 href="{% url 'details' %}">
+                    Change profile
+                </a>
+                <a
+                 class="list-group-item list-group-item-action"
+                 href="{% url 'password' %}">
+                    Change password
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% endblock %}
+

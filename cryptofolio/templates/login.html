@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<h3>Login</h3>
+<hr>
+<form method="post">
+	{% csrf_token %}
+    <div class="form-group">
+        {{ form.username.errors  }}
+        <div class="form-row">
+            <div class="col-md-2">
+                <label for="{{ form.username.id_for_label }}">
+                    {{ form.username.label }}:
+                </label>
+            </div>
+            <div class="col-md-8">
+                <input 
+                    type="text" 
+                    class="form-control"
+                    id="{{ form.username.id_for_label }}" 
+                    name="{{ form.username.name }}" 
+                    placeholder="johndoe"
+                 />
+                {% if form.username.help_text %}
+                <small class="form-text text-muted">
+                    {{ form.username.help_text|safe }}
+                </small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ form.password.errors  }}
+        <div class="form-row">
+            <div class="col-md-2">
+                <label for="{{ form.password.id_for_label }}">
+                    {{ form.password.label }}:
+                </label>
+            </div>
+            <div class="col-md-8">
+                <input 
+                    type="password" 
+                    class="form-control"
+                    id="{{ form.password.id_for_label }}" 
+                    name="{{ form.password.name }}" 
+                 />
+                {% if form.password.help_text %}
+                <small class="form-text text-muted">
+                    {{ form.password.help_text|safe }}
+                </small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+	<button type="submit" class="btn btn-primary">Login</button>
+</form>
+<br />
+<a href="{% url 'password_reset' %}">Forgot your password?</a>
+<br />
+<a href="{% url 'signup' %}">Don't have an account?</a>
+<br />
+{% endblock %}
+

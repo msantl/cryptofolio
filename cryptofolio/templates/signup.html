@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h3>Sign up</h3>
+<hr>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.username.errors  }}
+        <div class="form-row">
+            <div class="col-md-2">
+                <label for="{{ form.username.id_for_label }}">
+                    {{ form.username.label }}:
+                </label>
+            </div>
+            <div class="col-md-8">
+                <input 
+                    type="text" 
+                    class="form-control"
+                    id="{{ form.username.id_for_label }}" 
+                    name="{{ form.username.name }}" 
+                    placeholder="johndoe"
+                 />
+                {% if form.username.help_text %}
+                <small class="form-text text-muted">
+                    {{ form.username.help_text|safe }}
+                </small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ form.email.errors  }}
+        <div class="form-row">
+            <div class="col-md-2">
+                <label for="{{ form.email.id_for_label }}">
+                    {{ form.email.label }}:
+                </label>
+            </div>
+            <div class="col-md-8">
+                <input 
+                    type="email" 
+                    class="form-control"
+                    id="{{ form.email.id_for_label }}" 
+                    name="{{ form.email.name }}" 
+                    placeholder="johndoe@example.com"
+                 />
+                {% if form.email.help_text %}
+                <small class="form-text text-muted">
+                    {{ form.email.help_text|safe }}
+                </small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ form.first_name.errors  }}
+        <div class="form-row">
+            <div class="col-md-2">
+                <label for="{{ form.first_name.id_for_label }}">
+                    {{ form.first_name.label }}:
+                </label>
+            </div>
+            <div class="col-md-8">
+                <input 
+                    type="text" 
+                    class="form-control"
+                    id="{{ form.first_name.id_for_label }}" 
+                    name="{{ form.first_name.name }}" 
+                    placeholder="John"
+                 />
+                {% if form.first_name.help_text %}
+                <small class="form-text text-muted">
+                    {{ form.first_name.help_text|safe }}
+                </small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ form.last_name.errors  }}
+        <div class="form-row">
+            <div class="col-md-2">
+                <label for="{{ form.last_name.id_for_label }}">
+                    {{ form.last_name.label }}:
+                </label>
+            </div>
+            <div class="col-md-8">
+                <input 
+                    type="text" 
+                    class="form-control"
+                    id="{{ form.last_name.id_for_label }}" 
+                    name="{{ form.last_name.name }}" 
+                    placeholder="Doe"
+                 />
+                {% if form.last_name.help_text %}
+                <small class="form-text text-muted">
+                    {{ form.last_name.help_text|safe }}
+                </small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ form.password1.errors  }}
+        <div class="form-row">
+            <div class="col-md-2">
+                <label for="{{ form.password1.id_for_label }}">
+                    {{ form.password1.label }}:
+                </label>
+            </div>
+            <div class="col-md-8">
+                <input 
+                    type="password" 
+                    class="form-control"
+                    id="{{ form.password1.id_for_label }}" 
+                    name="{{ form.password1.name }}" 
+                 />
+                {% if form.password1.help_text %}
+                <small class="form-text text-muted">
+                    {{ form.password1.help_text|safe }}
+                </small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ form.password2.errors  }}
+        <div class="form-row">
+            <div class="col-md-2">
+                <label for="{{ form.password2.id_for_label }}">
+                    {{ form.password2.label }}:
+                </label>
+            </div>
+            <div class="col-md-8">
+                <input 
+                    type="password" 
+                    class="form-control"
+                    id="{{ form.password2.id_for_label }}" 
+                    name="{{ form.password2.name }}" 
+                 />
+                {% if form.password2.help_text %}
+                <small class="form-text text-muted">
+                    {{ form.password2.help_text|safe }}
+                </small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Sign up</button>
+</form>
+{% endblock %}
+

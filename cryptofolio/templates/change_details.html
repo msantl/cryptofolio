@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h3>User profile</h3>
+  <hr>
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+        {{ form.first_name.errors  }}
+        <div class="form-row">
+            <div class="col-md-2">
+                <label for="{{ form.first_name.id_for_label }}">
+                    {{ form.first_name.label }}:
+                </label>
+            </div>
+            <div class="col-md-8">
+                <input 
+                    type="text" 
+                    class="form-control"
+                    id="{{ form.first_name.id_for_label }}" 
+                    name="{{ form.first_name.name }}" 
+                    value="{{ form.first_name.value }}" 
+                    placeholder="John"
+                 />
+                {% if form.first_name.help_text %}
+                <small class="form-text text-muted">
+                    {{ form.first_name.help_text|safe }}
+                </small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ form.last_name.errors  }}
+        <div class="form-row">
+            <div class="col-md-2">
+                <label for="{{ form.last_name.id_for_label }}">
+                    {{ form.last_name.label }}:
+                </label>
+            </div>
+            <div class="col-md-8">
+                <input 
+                    type="text" 
+                    class="form-control"
+                    id="{{ form.last_name.id_for_label }}" 
+                    name="{{ form.last_name.name }}" 
+                    value="{{ form.last_name.value }}" 
+                    placeholder="Doe"
+                 />
+                {% if form.last_name.help_text %}
+                <small class="form-text text-muted">
+                    {{ form.last_name.help_text|safe }}
+                </small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        {{ fiat_form.fiat.errors  }}
+        <div class="form-row">
+            <div class="col-md-2">
+                <label for="{{ fiat_form.fiat.id_for_label }}">
+                    {{ fiat_form.fiat.label }}:
+                </label>
+            </div>
+            <div class="col-md-8">
+                <select 
+                    class="form-control"
+                    id="{{ fiat_form.fiat.id_for_label }}" 
+                    name="{{ fiat_form.fiat.name }}">
+                    {% for value, text in fiat_form.fiat.field.choices %}
+                    <option value={{ value }} {% if value|stringformat:"s" == fiat_form.fiat.value %} selected {% endif %}>
+                        {{ text|capfirst }}
+                    </option>
+                    {% endfor %}
+                </select>
+                {% if fiat_form.fiat.help_text %}
+                <small class="form-text text-muted">
+                    {{ fiat_form.fiat.help_text|safe }}
+                </small>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <button class="btn btn-primary" type="submit">Save</button>
+  </form>
+{% endblock %}
+
