@@ -17,6 +17,7 @@ django-nvd3==0.9.7
 django-sendgrid-v5==0.6.7
 django-twitter-bootstrap==3.3.0
 enum34==1.1.6
+gunicorn==19.7.1
 hyperlink==17.3.1
 idna==2.6
 incremental==17.5.0
