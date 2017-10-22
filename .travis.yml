@@ -7,7 +7,8 @@ services: mysql
 
 notifications:
     email: false
-    slack: crypto-folio:N1rYn7M4HZtsJqCDfSADEN5A
+    slack:
+		secure: "6jidojDI9Hhz/tFKK6PDjU+jDeawACWsyg5KdY8vrPopvvlRCnOorsy/lfEODbT2A/Nl+4McyOjrtKZFy92EVuReNmhZi6MwbEErDczLabZ+8PskiS9KQUEzK43bh/TDD+0INS1AWIz8Ua0jOZTJoUSBbvwO+BVMaJQTd0p2ZbppNtFda5wMUbCeQYPsxksUTK+YStpKY3farLK5TykhayrKgWtvdVqp0WgJ2FrtlLcbMYmH+JMWGd8W+AHCrmiqds6iR0e8Hh7RUPdkED0j01GJPH9dYG4S3hDOFFZJqN9ypxDtCRktEVwq3hYMJdx/eRST6gjDVDHV9q0KOrSL83ZMotsBV5BuLRojtOIcOaOruQweqFFXzCOdBTcxjNrTEzW8ajgf8gL7j4Owf5MOtbKHFTrP8Q8T263olB2c5Pkztzlaq7kex3mMrC7WNKgaZiA1LYW9rgwJi7TUeeFRZ0XKx6DYA/GUR+E6BdukGJyg16OIWsz0djVS8BNPX9OMFK1yJsO3RSiAx+/SMIYk8TUNsph+tNRyUP9WNtxLKM6efsePh6nMwwWzFRHSJJvAWT8+my2MnhxkcoEc9s9uslmTKbs3sLMROn20woxUJoiCyHNe46+wZtKKGwV7BCoOpAsS/tJEcQIYgdDxjx+MCpTAfHIzv2hv5rqSPDL+cPc="
 
 install:
     - pip install -r requirements.txt

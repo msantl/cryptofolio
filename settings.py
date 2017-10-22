@@ -16,7 +16,14 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = os.environ['SECRET_KEY']
 
 DEBUG = False
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'cryptofolio.herokuapp.com']
+ALLOWED_HOSTS = [
+    # local testing
+    '0.0.0.0',
+    '127.0.0.1',
+    'localhost',
+    # production
+    'cryptofolio.herokuapp.com'
+]
 
 # Application definition
 
