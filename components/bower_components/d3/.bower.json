@@ -1,0 +1,36 @@
+{
+  "name": "d3",
+  "version": "3.3.13",
+  "main": "d3.js",
+  "scripts": [
+    "d3.js"
+  ],
+  "ignore": [
+    ".DS_Store",
+    ".git",
+    ".gitignore",
+    ".npmignore",
+    ".travis.yml",
+    "Makefile",
+    "bin",
+    "component.json",
+    "index-browserify.js",
+    "index.js",
+    "lib",
+    "node_modules",
+    "package.json",
+    "src",
+    "test"
+  ],
+  "homepage": "https://github.com/mbostock-bower/d3-bower",
+  "_release": "3.3.13",
+  "_resolution": {
+    "type": "version",
+    "tag": "v3.3.13",
+    "commit": "50df7cbc7f55d8b3a43304a7b029516255c10bdc"
+  },
+  "_source": "https://github.com/mbostock-bower/d3-bower.git",
+  "_target": "3.3.13",
+  "_originalSource": "d3",
+  "_direct": true
+}

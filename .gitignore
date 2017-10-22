@@ -101,7 +101,3 @@ ENV/
 # sqlite
 *.sqlite
 *.sqlite3
-
-# bower components
-bower_components/*
-components/*

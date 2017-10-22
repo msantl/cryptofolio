@@ -1,8 +1,13 @@
-# cryptofolio
+# Cryptofolio
+### Your cryptocurrency portfolio! 
+
+https://cryptofolio.herokuapp.com/
 
 [![Build Status](https://travis-ci.org/msantl/cryptofolio.svg?branch=master)](https://travis-ci.org/msantl/cryptofolio)
 
-* `python manage.py collectstatic`
-* `python manage.py bower_install`
-* `source .env`
+
+## Local testing
+
+* `python manage.py bower install`
+* `python manage.py collectstatic --clear --noinput`
 * `python manage.py runserver`
