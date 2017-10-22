@@ -116,7 +116,7 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'cryptofolio/staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS=(
     os.path.join(BASE_DIR, 'cryptofolio/static'),
 )
@@ -126,6 +126,8 @@ BOWER_INSTALLED_APPS = (
     'd3#3.3.13',
     'nvd3#1.7.1',
     'popper.js#1.12.5',
+    'jquery#3.2.1',
+    'bootstrap#4.0.0-alpha.6',
 )
 
 BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'components')

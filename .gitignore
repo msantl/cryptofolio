@@ -105,10 +105,11 @@ ENV/
 *.sqlite3
 
 # static files
-cryptofolio/static/*
-cryptofolio/staticfiles/*
+staticfiles/*
 
+cryptofolio/static/*
 !cryptofolio/static/.gitkeep 
+!cryptofolio/static/favicon.png
 
 # bower components
 bower_components/*

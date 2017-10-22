@@ -4,13 +4,14 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'tether/dist/css/tether.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
         <link rel="shortcut icon" type="image/png" href="{% static 'favicon.png' %}"/>
         <title>{% block title %}Cryptofolio{% endblock %}</title>
     </head>
     <body>
         <header>
-			<nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
+			<nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse justify-content-between">
                 <a class="navbar-brand" href="{% url 'home' %}">
                     <img src="{% static 'favicon.png' %}" 
                         height="35"
@@ -72,8 +73,9 @@
                 </div>
             </div>
         </footer>
-        <script src="{% static 'jquery/jquery-3.2.1.min.js' %}"></script>
+        <script src="{% static 'jquery/dist/jquery.min.js' %}"></script>
         <script src="{% static 'popper.js/dist/umd/popper.js' %}"></script>
-        <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+        <script src="{% static 'tether/dist/js/tether.min.js' %}"></script>
+        <script src="{% static 'bootstrap/dist/js/bootstrap.min.js' %}"></script>
     </body>
 </html>
