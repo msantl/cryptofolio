@@ -143,5 +143,5 @@ BOWER_PATH = '/usr/local/bin/bower'
 FIELD_ENCRYPTION_KEY = os.environ['FIELD_ENCRYPTION_KEY']
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-# ADMINS = (('msantl', 'msantl.ck@gmail.com'),)
+ADMINS = (('msantl', 'msantl.ck@gmail.com'),)
 
