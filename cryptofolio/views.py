@@ -298,6 +298,9 @@ def removeExchange(request, exchange_id):
 
     return redirect('exchange', exchange_id=exchange_id)
 
+def policy(request):
+    return render(request, 'policy.html', {})
+
 def get_latest_exchange_balances(exchange_balances):
     latest_timestamp = exchange_balances.values(
         'currency'
