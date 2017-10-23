@@ -4,4 +4,5 @@ class Config:
     COINBASE="Coinbase"
     LIQUI="Liqui"
     POLONIEX="Poloniex"
+    GDAX="GDAX"
 

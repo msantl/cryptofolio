@@ -17,11 +17,52 @@
     {% if has_data == True %}
     <div>
         <h3>Total</h3>
-        <form method="post" action='/refreshBalances/' class="form-inline">
+        <form method="post" action='/refreshBalances/'>
             {% csrf_token %}
-            <div class="p-3">
-                {{ fiat_sum|floatformat:-8 }} {{ fiat }}
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <label>Cryptocurrency holdings:</label>
+                    </div>
+                    <div class="col-md-8">
+                        <input 
+                            type="text"
+                            class="form-control"
+                            disabled
+                            value="{{ fiat_sum|floatformat:-8 }} {{ fiat }}"
+                        />
+                    </div>
+                </div>
             </div>
+
+            {% if other_balances %}
+            <div class="form-group">
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <label>Other:</label>
+                    </div>
+                    <div class="col-md-8">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Currency</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for balance in other_balances|dictsortreversed:"amount" %}
+                                <tr>
+                                    <td>{{ balance.currency }}</td>
+                                    <td>{{ balance.amount|floatformat:-8 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+ 
             <button type="submit" class="btn btn-success">Refresh</button>
         </form>
     </div>
@@ -61,7 +102,7 @@
 
     {% else %}
     <p>Nothing to show :(</p>
-    <p>Please add API keys and secrets in settings!</p>
+    <p>Please add API keys and secrets in <a href="{% url 'settings' %}">settings</a>!</p>
     {% endif %}
 </body>
 

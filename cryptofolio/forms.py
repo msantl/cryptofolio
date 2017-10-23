@@ -17,7 +17,7 @@ class SignUpForm(UserCreationForm):
 class ExchangeAccountForm(forms.ModelForm):
     class Meta:
         model = models.ExchangeAccount
-        fields = ('key', 'secret',)
+        fields = ('key', 'secret', 'passphrase', )
 
 class UserChangeDetailsForm(forms.ModelForm):
     first_name = forms.CharField(

@@ -2,6 +2,8 @@ asn1crypto==0.22.0
 attrs==17.2.0
 autobahn==17.9.2
 Automat==0.6.0
+backports.ssl-match-hostname==3.5.0.1
+bintrees==2.0.7
 bittrex==0.1.4
 certifi==2017.7.27.1
 cffi==1.11.0
@@ -17,6 +19,7 @@ django-nvd3==0.9.7
 django-sendgrid-v5==0.6.7
 django-twitter-bootstrap==3.3.0
 enum34==1.1.6
+gdax==1.0.6
 gunicorn==19.7.1
 hyperlink==17.3.1
 idna==2.6
@@ -38,14 +41,15 @@ python-http-client==3.0.0
 python-nvd3==0.14.2
 python-slugify==1.1.4
 pytz==2017.2
-requests==2.18.4
+requests==2.13.0
 requests-cache==0.4.13
 sendgrid==5.2.0
 service-identity==17.0.0
-six==1.11.0
+six==1.10.0
 Twisted==17.5.0
 txaio==2.8.2
 Unidecode==0.4.21
 urllib3==1.22
+websocket-client==0.40.0
 whitenoise==3.3.1
 zope.interface==4.4.2

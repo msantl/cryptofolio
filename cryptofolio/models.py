@@ -36,7 +36,8 @@ class ExchangeAccount(models.Model):
         max_length=1024,
         default=None,
         blank=True,
-        null=True)
+        null=True,
+        help_text='<ul><li>Optional</li></ul>')
 
     def __str__(self):
         return "%s %s" % (self.user.username, self.exchange.name)

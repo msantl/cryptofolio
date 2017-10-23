@@ -37,5 +37,6 @@ urlpatterns = [
     url(r'^refreshBalances/$', views.refreshBalances, name='refreshBalances'),
     url(r'settings/details/$', views.changeDetails, name='details'),
     url(r'settings/password/$', views.changePassword, name='password'),
+    url(r'settings/exchange/(?P<exchange_id>[0-9A-Za-z]+)/remove$', views.removeExchange, name='removeExchange'),
 ]
 

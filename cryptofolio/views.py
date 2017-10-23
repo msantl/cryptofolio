@@ -31,10 +31,8 @@ def home(request):
     market = Coinmarket()
     rates = market.getRates(fiat)
     balances = []
+    other_balances = []
     crypto_balances = {}
-
-    history_data = {}
-    currencies = []
 
     for exchange_account in exchange_accounts:
         exchange_balances = models.ExchangeBalance.objects.filter(
@@ -62,6 +60,21 @@ def home(request):
                     'currency': currency,
                     'amount': crypto_balances[currency],
                     'amount_fiat': crypto_balances[currency] * rates[currency],
+                }
+            )
+        elif currency == fiat:
+            balances.append(
+                {
+                    'currency': currency,
+                    'amount': crypto_balances[currency],
+                    'amount_fiat': crypto_balances[currency],
+                }
+            )
+        else:
+            other_balances.append(
+                {
+                    'currency': currency,
+                    'amount': crypto_balances[currency]
                 }
             )
 
@@ -111,6 +124,7 @@ def home(request):
         {
             'fiat': fiat,
             'balances': balances,
+            'other_balances': other_balances,
             'fiat_sum': sum(fiat_ydata),
             'has_data': True,
             'crypto_piechart': crypto_piechart,
@@ -127,6 +141,7 @@ def settings(request):
 def exchange(request, exchange_id):
     exchange = get_object_or_404(models.Exchange, pk=exchange_id)
     latest_exchange_balances = None
+    stored_credentials = True
 
     if request.method == 'POST':
         form = forms.ExchangeAccountForm(request.POST)
@@ -137,6 +152,7 @@ def exchange(request, exchange_id):
             )
             exchange_account.key = form.cleaned_data.get('key')
             exchange_account.secret = form.cleaned_data.get('secret')
+            exchange_account.passphrase = form.cleaned_data.get('passphrase')
 
             exchange_account.save()
             has_errors, errors = models.update_exchange_balances([exchange_account])
@@ -167,6 +183,7 @@ def exchange(request, exchange_id):
             form = forms.ExchangeAccountForm(instance=exchange_account)
         except ObjectDoesNotExist:
             form = forms.ExchangeAccountForm()
+            stored_credentials = False
 
     return render(
         request,
@@ -174,6 +191,7 @@ def exchange(request, exchange_id):
         {
             'form': form,
             'exchange': exchange,
+            'stored_credentials': stored_credentials,
             'balances': latest_exchange_balances
         }
     )
@@ -261,6 +279,24 @@ def refreshBalances(request):
         for error in errors:
             messages.warning(request, error)
     return redirect('home')
+
+@login_required
+def removeExchange(request, exchange_id):
+    exchange = get_object_or_404(models.Exchange, pk=exchange_id)
+
+    try:
+        exchange_account = models.ExchangeAccount.objects.get(
+            user=request.user,
+            exchange=exchange
+        )
+
+        exchange_account.delete()
+        messages.success(request, 'Exhange removed!')
+
+    except ObjectDoesNotExist:
+        messages.warning(request, 'There was an error removing exchange from your account!')
+
+    return redirect('exchange', exchange_id=exchange_id)
 
 def get_latest_exchange_balances(exchange_balances):
     latest_timestamp = exchange_balances.values(

@@ -4,6 +4,7 @@ from Bittrex import Bittrex
 from Coinbase import Coinbase
 from Liqui import Liqui
 from Poloniex import Poloniex
+from GDAX import GDAX
 
 from Config import Config
 from ExchangeException import ExchangeException
@@ -24,6 +25,7 @@ class API:
         if self.exchange:
             key = self.exchange.key.encode('utf-8')
             secret = self.exchange.secret.encode('utf-8')
+            passphrase = self.exchange.passphrase.encode('utf-8')
             api = None
 
             if self.exchange.exchange.name == Config.BINANCE:
@@ -36,6 +38,8 @@ class API:
                 api = Liqui(key, secret)
             elif self.exchange.exchange.name == Config.POLONIEX:
                 api = Poloniex(key, secret)
+            elif self.exchange.exchange.name == Config.GDAX:
+                api = GDAX(key, secret, passphrase)
 
             if api:
                 try:
