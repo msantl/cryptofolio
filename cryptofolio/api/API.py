@@ -23,9 +23,17 @@ class API:
         error = None
 
         if self.exchange:
-            key = self.exchange.key.encode('utf-8')
-            secret = self.exchange.secret.encode('utf-8')
-            passphrase = self.exchange.passphrase.encode('utf-8')
+            key, secret, passphrase = ('', '', '')
+
+            if self.exchange.key:
+                key = self.exchange.key.encode('utf-8')
+
+            if self.exchange.secret:
+                secret = self.exchange.secret.encode('utf-8')
+
+            if self.exchange.passphrase:
+                passphrase = self.exchange.passphrase.encode('utf-8')
+
             api = None
 
             if self.exchange.exchange.name == Config.BINANCE:
