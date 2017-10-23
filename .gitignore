@@ -101,7 +101,3 @@ ENV/
 # sqlite
 *.sqlite
 *.sqlite3
-
-# staticfiles
-staticfiles/*
-!staticfiles/.gitkeep

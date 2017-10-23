@@ -137,8 +137,8 @@ BOWER_INSTALLED_APPS = (
     'nvd3#1.7.1',
     'popper.js#1.12.5',
     'jquery#3.2.1',
-    'bootstrap#4.0.0-alpha.6',
     'tether#1.4.0',
+    'bootstrap#4.0.0-alpha.6',
 )
 
 BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'components')
