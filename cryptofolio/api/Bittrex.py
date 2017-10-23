@@ -17,7 +17,7 @@ class Bittrex:
 
             for currency in result["result"]:
                 name = currency["Currency"].encode('utf-8').upper()
-                value = float(currency["Balance"].encode('utf-8'))
+                value = currency["Balance"]
 
                 if value > 0.0:
                     balances[name] = value
