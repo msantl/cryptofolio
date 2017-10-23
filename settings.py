@@ -129,6 +129,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS=(
     os.path.join(BASE_DIR, 'cryptofolio/static'),
 )
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 BOWER_INSTALLED_APPS = (
@@ -137,6 +138,7 @@ BOWER_INSTALLED_APPS = (
     'popper.js#1.12.5',
     'jquery#3.2.1',
     'bootstrap#4.0.0-alpha.6',
+    'tether#1.4.0',
 )
 
 BOWER_COMPONENTS_ROOT = os.path.join(BASE_DIR, 'components')
@@ -145,5 +147,5 @@ BOWER_PATH = '/usr/local/bin/bower'
 FIELD_ENCRYPTION_KEY = os.environ['FIELD_ENCRYPTION_KEY']
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-ADMINS = (('msantl', 'msantl.ck@gmail.com'),)
+ADMINS = (('msantl', 'msantl.ck+cryptofolio@gmail.com'),)
 
