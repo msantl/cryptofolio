@@ -7,6 +7,7 @@ from django.db import models
 from encrypted_model_fields.fields import EncryptedCharField
 
 from api.API import API
+from api.Logger import Logger
 
 class Currency(models.Model):
     name = models.CharField(max_length=10, primary_key=True)
@@ -53,6 +54,16 @@ class ExchangeBalance(models.Model):
                 self.exchangeAccount,
                 self.currency,
                 self.timestamp)
+
+def update_all_exchange_balances():
+    logger = Logger(__name__)
+    users = User.objects.all()
+    for user in users:
+        exchange_accounts = ExchangeAccount.objects.filter(user=user)
+        has_errors, errors = update_exchange_balances(exchange_accounts)
+        for error in errors:
+            logger.log(error)
+
 
 def update_exchange_balances(exchange_accounts):
     has_errors = False

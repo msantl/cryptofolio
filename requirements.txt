@@ -1,3 +1,4 @@
+APScheduler==3.4.0
 asn1crypto==0.22.0
 attrs==17.2.0
 autobahn==17.9.2
@@ -8,6 +9,7 @@ bittrex==0.1.4
 certifi==2017.7.27.1
 cffi==1.11.0
 chardet==3.0.4
+click==6.7
 coinbase==2.0.6
 coinmarketcap==4.1.1
 constantly==15.1.0
@@ -19,6 +21,8 @@ django-nvd3==0.9.7
 django-sendgrid-v5==0.6.7
 django-twitter-bootstrap==3.3.0
 enum34==1.1.6
+funcsigs==1.0.2
+futures==3.1.1
 gdax==1.0.6
 gunicorn==19.7.1
 hyperlink==17.3.1
@@ -41,13 +45,16 @@ python-http-client==3.0.0
 python-nvd3==0.14.2
 python-slugify==1.1.4
 pytz==2017.2
+redis==2.10.6
 requests==2.13.0
 requests-cache==0.4.13
+rq==0.8.2
 sendgrid==5.2.0
 service-identity==17.0.0
 six==1.10.0
 Twisted==17.5.0
 txaio==2.8.2
+tzlocal==1.4
 Unidecode==0.4.21
 urllib3==1.22
 websocket-client==0.40.0
