@@ -89,16 +89,16 @@ def home(request):
     charttype = "pieChart"
     chartcontainer = 'crypto_container'
     crypto_piechart = {
-    	'charttype': charttype,
-	'chartdata': chartdata,
-	'chartcontainer': chartcontainer,
-	'extra': {
-	    'x_is_date': False,
-	    'x_axis_format': '',
-	    'tag_script_js': True,
-	    'jquery_on_ready': False,
-	    }
-	}
+        'charttype': charttype,
+        'chartdata': chartdata,
+        'chartcontainer': chartcontainer,
+        'extra': {
+            'x_is_date': False,
+            'x_axis_format': '',
+            'tag_script_js': True,
+            'jquery_on_ready': False,
+        }
+    }
 
     extra_serie = {
         "tooltip": {"y_start": "", "y_end": " "+fiat},
@@ -107,16 +107,16 @@ def home(request):
     charttype = "pieChart"
     chartcontainer = 'fiat_container'
     fiat_piechart = {
-    	'charttype': charttype,
-	'chartdata': chartdata,
-	'chartcontainer': chartcontainer,
-	'extra': {
-	    'x_is_date': False,
-	    'x_axis_format': '',
-	    'tag_script_js': True,
-	    'jquery_on_ready': False,
-	    }
-	}
+        'charttype': charttype,
+        'chartdata': chartdata,
+        'chartcontainer': chartcontainer,
+        'extra': {
+            'x_is_date': False,
+            'x_axis_format': '',
+            'tag_script_js': True,
+            'jquery_on_ready': False,
+        }
+    }
 
     return render(
         request,
@@ -198,19 +198,19 @@ def exchange(request, exchange_id):
 
 def signup(request):
     if request.user.is_authenticated:
-	return redirect('/')
+        return redirect('/')
 
     if request.method == 'POST':
-	form = forms.SignUpForm(request.POST)
-	if form.is_valid():
-	    form.save()
-	    username = form.cleaned_data.get('username')
-	    raw_password = form.cleaned_data.get('password1')
-	    user = authenticate(username=username, password=raw_password)
-	    login(request, user)
-	    return redirect('home')
+        form = forms.SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('home')
     else:
-	form = forms.SignUpForm()
+        form = forms.SignUpForm()
 
     return render(request, 'signup.html', {'form': form})
 

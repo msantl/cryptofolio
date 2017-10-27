@@ -11,7 +11,13 @@
             {% csrf_token %}
         
             <div class="form-group">
-                {{ form.key.errors  }}
+                {% if form.key.errors %}
+                {% for error in form.key.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error|safe }}
+                </div>
+                {% endfor %}
+                {% endif %}
                 <div class="form-row">
                     <div class="col-md-4">
                         <label for="{{ form.key.id_for_label }}">
@@ -36,7 +42,13 @@
             </div>
         
             <div class="form-group">
-                {{ form.secret.errors  }}
+                {% if form.secret.errors %}
+                {% for error in form.secret.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error|safe }}
+                </div>
+                {% endfor %}
+                {% endif %}
                 <div class="form-row">
                     <div class="col-md-4">
                         <label for="{{ form.secret.id_for_label }}">
@@ -61,7 +73,13 @@
             </div>
 
             <div class="form-group">
-                {{ form.passphrase.errors  }}
+                {% if form.passphrase.errors %}
+                {% for error in form.passphrase.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error|safe }}
+                </div>
+                {% endfor %}
+                {% endif %}
                 <div class="form-row">
                     <div class="col-md-4">
                         <label for="{{ form.passphrase.id_for_label }}">

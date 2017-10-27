@@ -8,7 +8,13 @@
 <form method="post">
 	{% csrf_token %}
     <div class="form-group">
-        {{ form.username.errors  }}
+        {% if form.username.errors %}
+        {% for error in form.username.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error|safe }}
+            </div>
+        {% endfor %}
+        {% endif %}
         <div class="form-row">
             <div class="col-md-4">
                 <label for="{{ form.username.id_for_label }}">
@@ -33,7 +39,13 @@
     </div>
 
     <div class="form-group">
-        {{ form.password.errors  }}
+        {% if form.password.errors %}
+        {% for error in form.password.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error|safe }}
+            </div>
+        {% endfor %}
+        {% endif %}
         <div class="form-row">
             <div class="col-md-4">
                 <label for="{{ form.password.id_for_label }}">
