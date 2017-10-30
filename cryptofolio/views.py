@@ -36,14 +36,12 @@ def home(request):
 
     for exchange_account in exchange_accounts:
         exchange_balances = models.ExchangeBalance.objects.filter(
-            exchangeAccount=exchange_account
-        )
-        latest_exchange_balances = get_latest_exchange_balances(
-            exchange_balances
+            exchange_account=exchange_account,
+            most_recent=True
         )
 
         # aggregate latest balances
-        for exchange_balance in latest_exchange_balances:
+        for exchange_balance in exchange_balances:
             currency = exchange_balance.currency
             amount = exchange_balance.amount
 
@@ -140,7 +138,7 @@ def settings(request):
 @login_required
 def exchange(request, exchange_id):
     exchange = get_object_or_404(models.Exchange, pk=exchange_id)
-    latest_exchange_balances = None
+    exchange_balances = None
     stored_credentials = True
 
     if request.method == 'POST':
@@ -173,11 +171,8 @@ def exchange(request, exchange_id):
                 exchange=exchange
             )
             exchange_balances = models.ExchangeBalance.objects.filter(
-                exchangeAccount=exchange_account
-            )
-
-            latest_exchange_balances = get_latest_exchange_balances(
-                exchange_balances
+                exchange_account=exchange_account,
+                most_recent=True
             )
 
             form = forms.ExchangeAccountForm(instance=exchange_account)
@@ -192,7 +187,7 @@ def exchange(request, exchange_id):
             'form': form,
             'exchange': exchange,
             'stored_credentials': stored_credentials,
-            'balances': latest_exchange_balances
+            'balances': exchange_balances
         }
     )
 
@@ -302,18 +297,5 @@ def policy(request):
     return render(request, 'policy.html', {})
 
 def get_latest_exchange_balances(exchange_balances):
-    latest_timestamp = exchange_balances.values(
-        'currency'
-    ).annotate(
-        max_timestamp=Max('timestamp')
-    ).order_by()
-
-    q_statement = Q()
-    for pair in latest_timestamp:
-        q_statement |= (
-            Q(currency__exact=pair['currency']) &
-            Q(timestamp=pair['max_timestamp'])
-        )
-
-    return exchange_balances.filter(q_statement)
+    return exchange_balances.filter(most_recent=True)
 

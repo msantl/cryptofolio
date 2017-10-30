@@ -44,16 +44,21 @@ class ExchangeAccount(models.Model):
         return "%s %s" % (self.user.username, self.exchange.name)
 
 class ExchangeBalance(models.Model):
-    exchangeAccount = models.ForeignKey(ExchangeAccount, on_delete=models.CASCADE)
+    exchange_account = models.ForeignKey(
+        ExchangeAccount,
+        on_delete=models.CASCADE
+    )
     currency = models.CharField(max_length=50)
     amount = models.FloatField(default=None, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now=True)
+    most_recent = models.BooleanField(default=True)
 
     def __str__(self):
-        return "%s %s %s" %  (
-                self.exchangeAccount,
+        return "%s %s %s %s" %  (
+                self.exchange_account,
                 self.currency,
-                self.timestamp)
+                self.timestamp,
+                self.most_recent)
 
 def update_all_exchange_balances():
     logger = Logger(__name__)
@@ -76,14 +81,24 @@ def update_exchange_balances(exchange_accounts):
             has_errors = True
             errors.append(error)
         else:
+            reset_most_recent_field(exchange_account)
+
             for currency in balances:
                 exchange_balance = ExchangeBalance(
-                    exchangeAccount=exchange_account,
+                    exchange_account=exchange_account,
                     currency=currency,
-                    amount=balances[currency]
+                    amount=balances[currency],
+                    most_recent=True
                 )
                 exchange_balance.save()
-
     return (has_errors, errors)
 
+def reset_most_recent_field(exchange_account):
+    old_balances = ExchangeBalance.objects.filter(
+        exchange_account=exchange_account,
+        most_recent=True
+    )
+    for balance in old_balances:
+        balance.most_recent = False
+        balance.save()
 

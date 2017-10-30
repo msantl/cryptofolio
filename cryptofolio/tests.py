@@ -93,7 +93,7 @@ class ExchangeBalanceTests(TestCase):
         test_amount = get_test_amount()
 
         exchange_balance = models.ExchangeBalance(
-            exchangeAccount=exchange_account,
+            exchange_account=exchange_account,
             currency=test_currency,
             amount=test_amount,
         )
