@@ -1,17 +1,28 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.conf import settings as django_settings
 from django.contrib import messages
-from django.contrib.auth import login, authenticate, update_session_auth_hash
+from django.contrib.auth import (
+    REDIRECT_FIELD_NAME,
+    login as auth_login,
+    authenticate,
+    update_session_auth_hash
+)
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 from django.db.models import Max, Q
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404, resolve_url
 from django.template import RequestContext
+from django.utils.http import is_safe_url
+from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.debug import sensitive_post_parameters
 
 from . import forms
 from . import models
@@ -202,7 +213,7 @@ def signup(request):
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
-            login(request, user)
+            auth_login(request, user)
             return redirect('home')
     else:
         form = forms.SignUpForm()
@@ -299,3 +310,36 @@ def policy(request):
 def get_latest_exchange_balances(exchange_balances):
     return exchange_balances.filter(most_recent=True)
 
+@sensitive_post_parameters()
+@csrf_protect
+@never_cache
+def login(request):
+    redirect_to = request.GET.get(REDIRECT_FIELD_NAME, '')
+
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+
+            # Ensure the user-originating redirection url is safe.
+            if not is_safe_url(url=redirect_to, host=request.get_host()):
+                redirect_to = resolve_url(django_settings.LOGIN_REDIRECT_URL)
+
+            # Okay, security check complete. Log the user in.
+            auth_login(request, form.get_user())
+
+            return HttpResponseRedirect(redirect_to)
+        else:
+            messages.warning(request, 'Wrong username and/or password!')
+    else:
+        form = AuthenticationForm(request)
+
+    current_site = get_current_site(request)
+
+    context = {
+        'form': form,
+        REDIRECT_FIELD_NAME: redirect_to,
+        'site': current_site,
+        'site_name': current_site.name,
+    }
+
+    return render(request, 'login.html', context)
