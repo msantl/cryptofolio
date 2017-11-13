@@ -5,7 +5,7 @@ class Coinmarket:
         self.market = Market()
 
     def getRates(self, fiat):
-        ticker = self.market.ticker(convert=fiat)
+        ticker = self.market.ticker(limit=0, convert=fiat)
         market = {}
 
         for t in ticker:
