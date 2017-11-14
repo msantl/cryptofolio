@@ -42,7 +42,8 @@ to remove the exchange together with all the balances.
 
 
 ## Building From Source
-### OS X
+
+### OS X and Linux
 
 Dependencies:
 * `python`
@@ -52,6 +53,10 @@ Dependencies:
 
 Since this is a `django` project I encourage you to use `virtualenv` and
 `virtualenvwrapper`.
+
+If you're using a `Linux` distribution, you'll need to run 
+`sudo apt-get install libmariadbclient-dev` if you're running `mariadb` or
+`sudo apt-get install libmysqlclient-dev` otherwise.
 
 Install all `python` dependencies using `pip install -r requirements.txt`.
 
@@ -79,11 +84,14 @@ but you can collect all the dependencies with: `python manage.py bower install`
 After that, in order to serve the static files, you need to put them in a
 folder where they will be served from. This is done with: `python manage.py collectstatic --noinput` 
 
-Setting up a django superuser is not necessary, but it's convenient. You can do
-that with: `python manage.py createsuperuser`
-
 Make sure you have a local `mysql` server running. You should also create a
 database with the same name as the it is in environment variable `DB_NAME`.
+
+Once you've setup your local `mysql` server, run `python manage.py migrate`.
+This will create all the necessary tables in the database.
+
+Setting up a django superuser is not necessary, but it's convenient. You can do
+that with: `python manage.py createsuperuser`.
 
 Now you're ready to launch the app locally: `python manage.py runserver`
 The app should be served from `localhost:8000`.
