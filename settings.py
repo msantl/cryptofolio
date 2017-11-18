@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+import raven
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = os.environ['SECRET_KEY']
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'django_nvd3',
     'djangobower',
     'encrypted_model_fields',
+    'raven.contrib.django.raven_compat',
 ]
 
 MIDDLEWARE = [
@@ -147,5 +149,10 @@ BOWER_PATH = '/usr/local/bin/bower'
 FIELD_ENCRYPTION_KEY = os.environ['FIELD_ENCRYPTION_KEY']
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-ADMINS = (('msantl', 'msantl.ck+cryptofolio@gmail.com'),)
+
+SENTRY_DSN = os.environ['SENTRY_DSN']
+RAVEN_CONFIG = {
+    'dsn': SENTRY_DSN,
+    'release': raven.fetch_git_sha(os.path.abspath(BASE_DIR)),
+}
 
