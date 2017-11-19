@@ -153,6 +153,9 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 SENTRY_DSN = os.environ['SENTRY_DSN']
 RAVEN_CONFIG = {
     'dsn': SENTRY_DSN,
-    'release': raven.fetch_git_sha(os.path.abspath(BASE_DIR)),
+    'release': os.environ.get(
+        'HEROKU_SLUG_COMMIT',
+        raven.fetch_git_sha(os.path.abspath(BASE_DIR))
+    ),
 }
 
