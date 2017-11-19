@@ -150,12 +150,17 @@ FIELD_ENCRYPTION_KEY = os.environ['FIELD_ENCRYPTION_KEY']
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
+try:
+    git_commit_hash = raven.fetch_git_sha(os.path.abspath(BASE_DIR))
+except:
+    git_commit_hash = 'unknown hash'
+
 SENTRY_DSN = os.environ['SENTRY_DSN']
 RAVEN_CONFIG = {
     'dsn': SENTRY_DSN,
     'release': os.environ.get(
         'HEROKU_SLUG_COMMIT',
-        raven.fetch_git_sha(os.path.abspath(BASE_DIR))
+        git_commit_hash
     ),
 }
 
