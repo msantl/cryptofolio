@@ -5,7 +5,7 @@ from .ExchangeException import ExchangeException
 
 class Bittrex:
     def __init__(self, key, secret):
-        self.client = Client(bytes(key, 'utf-8'), bytes(secret, 'utf-8'))
+        self.client = Client(key, secret, api_version="v2.0")
         self.logger = Logger(__name__)
 
     def getBalances(self):
@@ -17,8 +17,8 @@ class Bittrex:
                 raise ExchangeException(self.__class__.__name__, result['message'])
 
             for currency in result["result"]:
-                name = currency["Currency"].encode('utf-8').upper()
-                value = currency["Balance"]
+                name = currency["Currency"]["Currency"]
+                value = currency["Balance"]["Balance"]
 
                 if value > 0.0:
                     balances[name] = value
