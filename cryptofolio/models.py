@@ -60,16 +60,6 @@ class ExchangeBalance(models.Model):
                 self.timestamp,
                 self.most_recent)
 
-def update_all_exchange_balances():
-    logger = Logger(__name__)
-    users = User.objects.all()
-    for user in users:
-        exchange_accounts = ExchangeAccount.objects.filter(user=user)
-        has_errors, errors = update_exchange_balances(exchange_accounts)
-        for error in errors:
-            logger.log(error)
-
-
 def update_exchange_balances(exchange_accounts):
     has_errors = False
     errors = []
