@@ -21,11 +21,11 @@
                 </label>
             </div>
             <div class="col-md-8">
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     class="form-control"
-                    id="{{ form.username.id_for_label }}" 
-                    name="{{ form.username.name }}" 
+                    id="{{ form.username.id_for_label }}"
+                    name="{{ form.username.name }}"
                     placeholder="johndoe"
                  />
                 {% if form.username.help_text %}
@@ -52,11 +52,11 @@
                 </label>
             </div>
             <div class="col-md-8">
-                <input 
-                    type="email" 
+                <input
+                    type="email"
                     class="form-control"
-                    id="{{ form.email.id_for_label }}" 
-                    name="{{ form.email.name }}" 
+                    id="{{ form.email.id_for_label }}"
+                    name="{{ form.email.name }}"
                     placeholder="johndoe@example.com"
                  />
                 {% if form.email.help_text %}
@@ -83,11 +83,11 @@
                 </label>
             </div>
             <div class="col-md-8">
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     class="form-control"
-                    id="{{ form.first_name.id_for_label }}" 
-                    name="{{ form.first_name.name }}" 
+                    id="{{ form.first_name.id_for_label }}"
+                    name="{{ form.first_name.name }}"
                     placeholder="John"
                  />
                 {% if form.first_name.help_text %}
@@ -114,11 +114,11 @@
                 </label>
             </div>
             <div class="col-md-8">
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     class="form-control"
-                    id="{{ form.last_name.id_for_label }}" 
-                    name="{{ form.last_name.name }}" 
+                    id="{{ form.last_name.id_for_label }}"
+                    name="{{ form.last_name.name }}"
                     placeholder="Doe"
                  />
                 {% if form.last_name.help_text %}
@@ -145,11 +145,11 @@
                 </label>
             </div>
             <div class="col-md-8">
-                <input 
-                    type="password" 
+                <input
+                    type="password"
                     class="form-control"
-                    id="{{ form.password1.id_for_label }}" 
-                    name="{{ form.password1.name }}" 
+                    id="{{ form.password1.id_for_label }}"
+                    name="{{ form.password1.name }}"
                     placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;"
                  />
                 {% if form.password1.help_text %}
@@ -176,11 +176,11 @@
                 </label>
             </div>
             <div class="col-md-8">
-                <input 
-                    type="password" 
+                <input
+                    type="password"
                     class="form-control"
-                    id="{{ form.password2.id_for_label }}" 
-                    name="{{ form.password2.name }}" 
+                    id="{{ form.password2.id_for_label }}"
+                    name="{{ form.password2.name }}"
                     placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;"
                  />
                 {% if form.password2.help_text %}
@@ -192,6 +192,12 @@
         </div>
     </div>
 
+    <p>
+        By signing up you agree to
+        <a href="{% url 'policy' %}">
+            Terms of Usage and Privacy Policy
+        </a>.
+    </p>
     <button type="submit" class="btn btn-primary">Sign up</button>
 </form>
 {% endblock %}

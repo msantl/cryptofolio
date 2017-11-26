@@ -16,7 +16,7 @@ import raven
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = os.environ['SECRET_KEY']
 
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = [
     # local testing
     '0.0.0.0',

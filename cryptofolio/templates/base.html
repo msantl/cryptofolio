@@ -13,7 +13,7 @@
         <header>
 			<nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse justify-content-between">
                 <a class="navbar-brand" href="{% url 'home' %}">
-                    <img src="{% static 'favicon.png' %}" 
+                    <img src="{% static 'favicon.png' %}"
                         height="35"
                         class="d-inline-block align-top"
                         alt="Cryptofolio"
@@ -56,10 +56,14 @@
                 <div class="float-left">
                     <span class="text-muted">
                         <p class="small">
-                            Cryptofolio - your cryptocurrency portfolio! | 
+                            Cryptofolio - your cryptocurrency portfolio! |
                             <a href="https://goo.gl/forms/k2zGKn1Ss7ph6eKp2">feedback</a> |
                             <a href="{% url 'policy' %}">policy</a> |
                             <a href="https://github.com/msantl/cryptofolio">contribute</a>
+                            <br />
+                            <a href="http://coinmarketcap.com" target="_blank">
+                                Powered by CoinMarketCap
+                            </a>
                             <br />
                             Copyright &copy; {% now "Y" %}
                         </p>
