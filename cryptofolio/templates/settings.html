@@ -11,16 +11,27 @@
             <div class="list-group">
                 {% for exchange in exchanges %}
                 <a
-                 class="list-group-item list-group-item-action"
-                 href="{% url 'exchange' exchange.name %}">
+                    class="list-group-item list-group-item-action"
+                    href="{% url 'exchange' exchange.name %}">
                     {{exchange.name}}
                 </a>
                 {% endfor %}
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-8">
+            {% if exchanges %}
+            <form method="post" action='/refreshBalances/'>
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">
+                    Refresh all balances
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
     <hr>
-
     <h3>User settings</h3>
     <div class="row">
         <div class="col-md-8">

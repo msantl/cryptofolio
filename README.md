@@ -1,16 +1,22 @@
 # Cryptofolio
 ### Your cryptocurrency portfolio! 
 
-![Cryptofolio](/docs/logo.png)
-
-Available at https://cryptofolio.herokuapp.com/ 
+<div style="text-align: center;" align="center">
+<a href="https://cryptofolio.herokuapp.com/">
+    <img src="/docs/logo.png" width="200">
+</a>
+<p>Available at https://cryptofolio.herokuapp.com/ </p>
+</div>
 
 [![Build Status](https://travis-ci.org/msantl/cryptofolio.svg?branch=master)](https://travis-ci.org/msantl/cryptofolio)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 ## Usage
+<b>Cryptofolio</b> has four main pages. The home page, settings page,
+exchange page and user profile page.
+
 ### Home 
-![Home Screen](/docs/home.png)
+<img src="/docs/home.png" width="600">
 
 Home screen takes the current state in the cryptomarket and shows you how much
 are your cryptocurrency holdings worth at the given time.
@@ -18,7 +24,7 @@ are your cryptocurrency holdings worth at the given time.
 The refresh button updates balances from all exchanges you have configured.
 
 ### Settings
-![Settings Screen](/docs/settings.png)
+<img src="/docs/settings.png" width="600">
 
 Settings screen has two sections, Exchange settings and User settings.
 Exchange settings allow you to add API key, secret, and passphrase for an
@@ -27,7 +33,7 @@ exchange that is available in Crypofolio.
 User settings allow you to change your details and your password.
 
 ### User Profile
-![User Profile Screen](/docs/user_profile.png)
+<img src="/docs/user_profile.png" width="600">
 
 In User Profile settings you can change your first and last name, and the
 preffered FIAT currency.
@@ -35,7 +41,7 @@ preffered FIAT currency.
 Cryptofolio will use this to summarize your holdings.
 
 ### Exchange
-![Exchange Screen](/docs/exchange.png)
+<img src="/docs/exchange.png" width="600">
 
 Exchange Settings allow you to add/update API key, secret, and passphrase and
 to remove the exchange together with all the balances.
@@ -62,8 +68,15 @@ Install all `python` dependencies using `pip install -r requirements.txt`.
 
 Once you checkout this repository, you need to setup some environment
 variables.
-I'm using `sendgrid` as an email backend, so if you want to do the same, you
+
+Crpytofilo uses:
+* `sendgrid` as an email backend, so if you want to do the same, you
 need to create an account there and obtain the `sendgrid` API key.
+
+* `sentry` for error tracking.  If you want to track all the errors by either
+heroku slug commit or git commit hash, create an account there and get your
+`sentry` data source name (DSN).
+
 
 Environment variables:
 * `SECRET_KEY`
@@ -74,6 +87,7 @@ Environment variables:
 * `DB_PASSWORD`
 * `DB_HOST`
 * `DB_PORT`
+* `SENTRY_DSN`
 
 Once you've set up those variables you can start setting up some base project
 settings.
@@ -102,4 +116,4 @@ currencies and Exchanges. So go ahead and add `USD` and `EUR` in `Currency`
 table, and `Binance`, `Bittrex`, `Coinbase`, `GDAX`, `Liqui` and `Poloniex` in
 `Exchange` table.
 
-Now you're ready to use Cryptofolio locally! 
+Now you're ready to use <b>Cryptofolio</b> locally! 

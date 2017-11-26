@@ -284,7 +284,7 @@ def refreshBalances(request):
     if has_errors:
         for error in errors:
             messages.warning(request, error)
-    return redirect('home')
+    return redirect('settings')
 
 @login_required
 def removeExchange(request, exchange_id):
