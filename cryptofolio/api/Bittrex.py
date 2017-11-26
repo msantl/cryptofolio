@@ -1,10 +1,11 @@
-from Logger import Logger
-from ExchangeException import ExchangeException
 from bittrex import Bittrex as Client
+
+from .Logger import Logger
+from .ExchangeException import ExchangeException
 
 class Bittrex:
     def __init__(self, key, secret):
-        self.client = Client(key, secret)
+        self.client = Client(bytes(key, 'utf-8'), bytes(secret, 'utf-8'))
         self.logger = Logger(__name__)
 
     def getBalances(self):
@@ -25,4 +26,4 @@ class Bittrex:
             return balances
         except Exception as e:
             self.logger.log(e)
-            raise ExchangeException(self.__class__.__name__, e.message)
+            raise ExchangeException(self.__class__.__name__, e)

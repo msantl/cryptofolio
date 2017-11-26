@@ -6,8 +6,7 @@ from django.db import models
 
 from encrypted_model_fields.fields import EncryptedCharField
 
-from api.API import API
-from api.Logger import Logger
+from .api.API import API
 
 class Currency(models.Model):
     name = models.CharField(max_length=10, primary_key=True)

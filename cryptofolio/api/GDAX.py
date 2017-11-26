@@ -1,6 +1,7 @@
-from Logger import Logger
-from ExchangeException import ExchangeException
 import gdax
+
+from .Logger import Logger
+from .ExchangeException import ExchangeException
 
 class GDAX:
     def __init__(self, key, secret, passphrase):
@@ -12,6 +13,9 @@ class GDAX:
             result = self.client.get_accounts()
             balances = {}
 
+            if 'message' in result:
+                raise Exception(result['message'])
+
             for currency in result:
                 name = currency["currency"].encode('utf-8').upper()
                 value = float(currency["balance"].encode('utf-8'))
@@ -22,5 +26,5 @@ class GDAX:
             return balances
         except Exception as e:
             self.logger.log(e)
-            raise ExchangeException(self.__class__.__name__, e.message)
+            raise ExchangeException(self.__class__.__name__, e)
 

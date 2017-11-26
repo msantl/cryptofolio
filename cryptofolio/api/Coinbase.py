@@ -1,6 +1,7 @@
-from Logger import Logger
-from ExchangeException import ExchangeException
 from coinbase.wallet.client import Client
+
+from .Logger import Logger
+from .ExchangeException import ExchangeException
 
 class Coinbase:
     def __init__(self, key, secret):
@@ -22,5 +23,5 @@ class Coinbase:
             return balances
         except Exception as e:
             self.logger.log(e)
-            raise ExchangeException(self.__class__.__name__, e.message)
+            raise ExchangeException(self.__class__.__name__, e)
 
