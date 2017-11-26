@@ -155,12 +155,13 @@ try:
 except:
     git_commit_hash = 'unknown hash'
 
-SENTRY_DSN = os.environ['SENTRY_DSN']
-RAVEN_CONFIG = {
-    'dsn': SENTRY_DSN,
-    'release': os.environ.get(
-        'HEROKU_SLUG_COMMIT',
-        git_commit_hash
-    ),
-}
+if not DEBUG:
+    SENTRY_DSN = os.environ['SENTRY_DSN']
+    RAVEN_CONFIG = {
+        'dsn': SENTRY_DSN,
+        'release': os.environ.get(
+            'HEROKU_SLUG_COMMIT',
+            git_commit_hash
+            ),
+        }
 
