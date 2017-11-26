@@ -1,6 +1,7 @@
-from Logger import Logger
-from ExchangeException import ExchangeException
 from poloniex import Poloniex as Client
+
+from .Logger import Logger
+from .ExchangeException import ExchangeException
 
 class Poloniex:
     def __init__(self, key, secret):
@@ -22,4 +23,4 @@ class Poloniex:
             return balances
         except Exception as e:
             self.logger.log(e)
-            raise ExchangeException(self.__class__.__name__, e.message)
+            raise ExchangeException(self.__class__.__name__, e)

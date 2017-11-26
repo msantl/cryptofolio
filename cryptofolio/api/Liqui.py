@@ -1,6 +1,7 @@
-from Logger import Logger
-from ExchangeException import ExchangeException
 from liqui import Liqui as Client
+
+from .Logger import Logger
+from .ExchangeException import ExchangeException
 
 class Liqui:
     def __init__(self, key, secret):
@@ -10,6 +11,7 @@ class Liqui:
     def getBalances(self):
         try:
             result = self.client.balances()
+            print(result)
             balances = {}
 
             for currency in result.keys():
@@ -22,4 +24,4 @@ class Liqui:
             return balances
         except Exception as e:
             self.logger.log(e)
-            raise ExchangeException(self.__class__.__name__, e.message)
+            raise ExchangeException(self.__class__.__name__, e)

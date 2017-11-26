@@ -1,13 +1,12 @@
-from Coinmarketcap import Coinmarket
-from Binance import Binance
-from Bittrex import Bittrex
-from Coinbase import Coinbase
-from Liqui import Liqui
-from Poloniex import Poloniex
-from GDAX import GDAX
+from .Binance import Binance
+from .Bittrex import Bittrex
+from .Coinbase import Coinbase
+from .Liqui import Liqui
+from .Poloniex import Poloniex
+from .GDAX import GDAX
 
-from Config import Config
-from ExchangeException import ExchangeException
+from .Config import Config
+from .ExchangeException import ExchangeException
 
 class API:
     def __init__(self, exchange=None):
@@ -26,13 +25,13 @@ class API:
             key, secret, passphrase = ('', '', '')
 
             if self.exchange.key:
-                key = self.exchange.key.encode('utf-8')
+                key = self.exchange.key
 
             if self.exchange.secret:
-                secret = self.exchange.secret.encode('utf-8')
+                secret = self.exchange.secret
 
             if self.exchange.passphrase:
-                passphrase = self.exchange.passphrase.encode('utf-8')
+                passphrase = self.exchange.passphrase
 
             api = None
 
