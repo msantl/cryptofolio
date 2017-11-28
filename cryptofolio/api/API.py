@@ -4,6 +4,7 @@ from .Coinbase import Coinbase
 from .Liqui import Liqui
 from .Poloniex import Poloniex
 from .GDAX import GDAX
+from .Kraken import Kraken
 
 from .Config import Config
 from .ExchangeException import ExchangeException
@@ -47,6 +48,8 @@ class API:
                 api = Poloniex(key, secret)
             elif self.exchange.exchange.name == Config.GDAX:
                 api = GDAX(key, secret, passphrase)
+            elif self.exchange.exchange.name == Config.KRAKEN:
+                api = Kraken(key, secret)
 
             if api:
                 try:
@@ -60,8 +63,7 @@ class API:
                     error = e.message
             else:
                 error = "Exchange %s is not defined!" % (
-                    self.exchange.exchange.name
-                )
+                    self.exchange.exchange.name)
 
         return (balances, error)
 

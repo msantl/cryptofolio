@@ -5,4 +5,5 @@ class Config:
     LIQUI="Liqui"
     POLONIEX="Poloniex"
     GDAX="GDAX"
+    KRAKEN="Kraken"
 
