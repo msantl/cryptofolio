@@ -14,7 +14,7 @@ class Bittrex:
             balances = {}
 
             if not result['success']:
-                raise ExchangeException(self.__class__.__name__, result['message'])
+                raise Exception(result['message'])
 
             for currency in result["result"]:
                 name = currency["Currency"]["Currency"]

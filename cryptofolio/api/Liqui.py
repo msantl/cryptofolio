@@ -11,7 +11,6 @@ class Liqui:
     def getBalances(self):
         try:
             result = self.client.balances()
-            print(result)
             balances = {}
 
             for currency in result.keys():
