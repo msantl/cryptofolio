@@ -6,26 +6,34 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from . import models
 
+
 def create_test_user():
     return User(username="test", password="test")
+
 
 def create_test_exchange():
     return models.Exchange(name="TEST")
 
+
 def get_test_key():
     return "123"
+
 
 def get_test_secret():
     return "321"
 
+
 def get_test_passphrase():
     return "abc"
+
 
 def get_test_currency():
     return "BTC"
 
+
 def get_test_amount():
     return "123.456789"
+
 
 class UserProfileTests(TestCase):
     def test_create(self):
@@ -39,6 +47,7 @@ class UserProfileTests(TestCase):
 
         self.assertEqual(user_profile.user, test_user)
         self.assertEqual(user_profile.fiat, test_fiat)
+
 
 class ExchangeAccountTests(TestCase):
     def test_create_empty_passphrase(self):

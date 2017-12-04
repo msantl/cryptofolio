@@ -8,11 +8,13 @@ from encrypted_model_fields.fields import EncryptedCharField
 
 from .api.API import API
 
+
 class Currency(models.Model):
     name = models.CharField(max_length=10, primary_key=True)
 
     def __str__(self):
         return self.name
+
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -21,11 +23,13 @@ class UserProfile(models.Model):
     def __str__(self):
         return "%s %s" % (self.user, self.fiat)
 
+
 class Exchange(models.Model):
     name = models.CharField(max_length=100, primary_key=True)
 
     def __str__(self):
         return self.name
+
 
 class ExchangeAccount(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -42,6 +46,7 @@ class ExchangeAccount(models.Model):
     def __str__(self):
         return "%s %s" % (self.user.username, self.exchange.name)
 
+
 class ExchangeBalance(models.Model):
     exchange_account = models.ForeignKey(
         ExchangeAccount,
@@ -53,11 +58,12 @@ class ExchangeBalance(models.Model):
     most_recent = models.BooleanField(default=True)
 
     def __str__(self):
-        return "%s %s %s %s" %  (
-                self.exchange_account,
-                self.currency,
-                self.timestamp,
-                self.most_recent)
+        return "%s %s %s %s" % (
+            self.exchange_account,
+            self.currency,
+            self.timestamp,
+            self.most_recent)
+
 
 def update_exchange_balances(exchange_accounts):
     has_errors = False
@@ -82,6 +88,7 @@ def update_exchange_balances(exchange_accounts):
                 exchange_balance.save()
     return (has_errors, errors)
 
+
 def reset_most_recent_field(exchange_account):
     old_balances = ExchangeBalance.objects.filter(
         exchange_account=exchange_account,
@@ -90,4 +97,3 @@ def reset_most_recent_field(exchange_account):
     for balance in old_balances:
         balance.most_recent = False
         balance.save()
-

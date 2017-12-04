@@ -8,4 +8,4 @@ class CryptofolioConfig(AppConfig):
     name = 'cryptofolio'
 
     def ready(self):
-        import signals
+        from . import signals

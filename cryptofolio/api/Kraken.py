@@ -3,10 +3,16 @@ from .ExchangeException import ExchangeException
 
 from krakenex import API as Client
 
+
 class Kraken:
     def __init__(self, key, secret):
-        self.client = Client(key=key, secret=secret)
         self.logger = Logger(__name__)
+
+        try:
+            self.client = Client(key, secret)
+        except Exception as e:
+            self.logger.log(e)
+            raise ExchangeException(self.__class__.__name__, e)
 
     def getBalances(self):
         try:
@@ -32,4 +38,3 @@ class Kraken:
         except Exception as e:
             self.logger.log(e)
             raise ExchangeException(self.__class__.__name__, e.message)
-

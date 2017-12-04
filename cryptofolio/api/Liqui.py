@@ -3,10 +3,16 @@ from liqui import Liqui as Client
 from .Logger import Logger
 from .ExchangeException import ExchangeException
 
+
 class Liqui:
     def __init__(self, key, secret):
-        self.client = Client(key, secret)
         self.logger = Logger(__name__)
+
+        try:
+            self.client = Client(key, secret)
+        except Exception as e:
+            self.logger.log(e)
+            raise ExchangeException(self.__class__.__name__, e)
 
     def getBalances(self):
         try:

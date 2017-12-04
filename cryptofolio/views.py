@@ -29,9 +29,11 @@ from . import models
 
 from .api.Coinmarket import Coinmarket
 
+
 @login_required
 def home(request):
-    exchange_accounts = models.ExchangeAccount.objects.filter(user=request.user)
+    exchange_accounts = models.ExchangeAccount.objects.filter(
+        user=request.user)
 
     if not exchange_accounts:
         return render(request, 'home.html', {'has_data': False})
@@ -87,9 +89,9 @@ def home(request):
                 }
             )
 
-    xdata = [ x['currency'] for x in balances ]
-    crypto_ydata = [ x['amount'] for x in balances ]
-    fiat_ydata = [ x['amount_fiat'] for x in balances ]
+    xdata = [x['currency'] for x in balances]
+    crypto_ydata = [x['amount'] for x in balances]
+    fiat_ydata = [x['amount_fiat'] for x in balances]
 
     extra_serie = {
         "tooltip": {"y_start": "", "y_end": " coins"},
@@ -110,7 +112,7 @@ def home(request):
     }
 
     extra_serie = {
-        "tooltip": {"y_start": "", "y_end": " "+fiat},
+        "tooltip": {"y_start": "", "y_end": " " + fiat},
     }
     chartdata = {'x': xdata, 'y1': fiat_ydata, 'extra1': extra_serie}
     charttype = "pieChart"
@@ -141,10 +143,12 @@ def home(request):
         }
     )
 
+
 @login_required
 def settings(request):
     exchanges = models.Exchange.objects.all()
     return render(request, 'settings.html', {'exchanges': exchanges})
+
 
 @login_required
 def exchange(request, exchange_id):
@@ -156,15 +160,16 @@ def exchange(request, exchange_id):
         form = forms.ExchangeAccountForm(request.POST)
         if form.is_valid():
             exchange_account, created = models.ExchangeAccount.objects.get_or_create(
-                user = request.user,
-                exchange = exchange
+                user=request.user,
+                exchange=exchange
             )
             exchange_account.key = form.cleaned_data.get('key')
             exchange_account.secret = form.cleaned_data.get('secret')
             exchange_account.passphrase = form.cleaned_data.get('passphrase')
 
             exchange_account.save()
-            has_errors, errors = models.update_exchange_balances([exchange_account])
+            has_errors, errors = models.update_exchange_balances(
+                [exchange_account])
 
             if has_errors:
                 for error in errors:
@@ -202,6 +207,7 @@ def exchange(request, exchange_id):
         }
     )
 
+
 def signup(request):
     if request.user.is_authenticated:
         return redirect('/')
@@ -220,6 +226,7 @@ def signup(request):
 
     return render(request, 'signup.html', {'form': form})
 
+
 @login_required
 @transaction.atomic
 def changeDetails(request):
@@ -232,10 +239,12 @@ def changeDetails(request):
         if form.is_valid() and fiat_form.is_valid():
             form.save()
             fiat_form.save()
-            messages.success(request, 'Your details were successfully updated!')
+            messages.success(
+                request, 'Your details were successfully updated!')
             return redirect('settings')
         else:
-            messages.warning(request, 'There was an error changing your details!')
+            messages.warning(
+                request, 'There was an error changing your details!')
     else:
         form = forms.UserChangeDetailsForm(instance=request.user)
         fiat_form = forms.UserChangeFiatForm(
@@ -251,6 +260,7 @@ def changeDetails(request):
         }
     )
 
+
 @login_required
 def changePassword(request):
     if request.method == 'POST':
@@ -258,33 +268,40 @@ def changePassword(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            messages.success(request, 'Your password was successfully updated!')
+            messages.success(
+                request, 'Your password was successfully updated!')
             return redirect('settings')
         else:
-            messages.warning(request, 'There was an error changing your password!')
+            messages.warning(
+                request, 'There was an error changing your password!')
     else:
         form = PasswordChangeForm(request.user)
 
     return render(request, 'change_password.html', {'form': form})
 
+
 def handler404(request):
     response = render(request, '4oh4.html', {})
-    response.status_code= 404
+    response.status_code = 404
     return response
+
 
 def handler500(request):
     response = render(request, '500.html', {})
     response.status_code = 500
     return response
 
+
 @login_required
 def refreshBalances(request):
-    exchange_accounts = models.ExchangeAccount.objects.filter(user=request.user)
+    exchange_accounts = models.ExchangeAccount.objects.filter(
+        user=request.user)
     has_errors, errors = models.update_exchange_balances(exchange_accounts)
     if has_errors:
         for error in errors:
             messages.warning(request, error)
     return redirect('settings')
+
 
 @login_required
 def removeExchange(request, exchange_id):
@@ -300,15 +317,19 @@ def removeExchange(request, exchange_id):
         messages.success(request, 'Exhange removed!')
 
     except ObjectDoesNotExist:
-        messages.warning(request, 'There was an error removing exchange from your account!')
+        messages.warning(
+            request, 'There was an error removing exchange from your account!')
 
     return redirect('exchange', exchange_id=exchange_id)
+
 
 def policy(request):
     return render(request, 'policy.html', {})
 
+
 def get_latest_exchange_balances(exchange_balances):
     return exchange_balances.filter(most_recent=True)
+
 
 @sensitive_post_parameters()
 @csrf_protect

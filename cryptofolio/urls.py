@@ -10,7 +10,8 @@ urlpatterns = [
         views.login,
         name='login'
     ),
-    url(r'^logout/$', auth_views.logout, {'template_name': 'logout.html'}, name='logout'),
+    url(r'^logout/$', auth_views.logout,
+        {'template_name': 'logout.html'}, name='logout'),
     url(
         r'^password_reset/$',
         auth_views.password_reset,
@@ -26,7 +27,7 @@ urlpatterns = [
     url(
         r'^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
         auth_views.password_reset_confirm,
-    {   'template_name': 'password_reset_confirm.html'},
+        {'template_name': 'password_reset_confirm.html'},
         name='password_reset_confirm'
     ),
     url(
@@ -37,7 +38,8 @@ urlpatterns = [
     ),
     url(r'^signup/$', views.signup, name='signup'),
     url(r'^settings/$', views.settings, name='settings'),
-    url(r'^settings/exchange/(?P<exchange_id>[0-9A-Za-z]+)/$', views.exchange, name='exchange'),
+    url(r'^settings/exchange/(?P<exchange_id>[0-9A-Za-z]+)/$',
+        views.exchange, name='exchange'),
     url(r'^refreshBalances/$', views.refreshBalances, name='refreshBalances'),
     url(r'^settings/details/$', views.changeDetails, name='details'),
     url(r'^settings/password/$', views.changePassword, name='password'),
@@ -48,4 +50,3 @@ urlpatterns = [
     ),
     url(r'^policy/$', views.policy, name='policy'),
 ]
-

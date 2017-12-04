@@ -1,12 +1,18 @@
-import gdax
+from gdax import AuthenticatedClient as Client
 
 from .Logger import Logger
 from .ExchangeException import ExchangeException
 
+
 class GDAX:
     def __init__(self, key, secret, passphrase):
-        self.client = gdax.AuthenticatedClient(key, secret, passphrase)
         self.logger = Logger(__name__)
+
+        try:
+            self.client = Client(key, secret, passphrase)
+        except Exception as e:
+            self.logger.log(e)
+            raise ExchangeException(self.__class__.__name__, e)
 
     def getBalances(self):
         try:
@@ -27,4 +33,3 @@ class GDAX:
         except Exception as e:
             self.logger.log(e)
             raise ExchangeException(self.__class__.__name__, e)
-
