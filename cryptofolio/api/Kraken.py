@@ -37,4 +37,4 @@ class Kraken:
             return balances
         except Exception as e:
             self.logger.log(e)
-            raise ExchangeException(self.__class__.__name__, e.message)
+            raise ExchangeException(self.__class__.__name__, e)

@@ -20,7 +20,6 @@ class API:
 
     def __getBalances(self):
         balances = {}
-
         error = None
 
         if self.exchange:
