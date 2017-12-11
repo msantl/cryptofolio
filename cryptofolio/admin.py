@@ -10,4 +10,5 @@ admin.site.register(ExchangeAccount)
 admin.site.register(ExchangeBalance)
 admin.site.register(Currency)
 admin.site.register(UserProfile)
+admin.site.register(ManualInput)
 

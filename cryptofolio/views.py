@@ -34,8 +34,9 @@ from .api.Coinmarket import Coinmarket
 def home(request):
     exchange_accounts = models.ExchangeAccount.objects.filter(
         user=request.user)
+    manual_inputs = models.ManualInput.objects.filter(user=request.user)
 
-    if not exchange_accounts:
+    if not exchange_accounts and not manual_inputs:
         return render(request, 'home.html', {'has_data': False})
 
     fiat = request.user.userprofile.fiat
@@ -62,6 +63,15 @@ def home(request):
                 crypto_balances[currency] += amount
             else:
                 crypto_balances[currency] = amount
+
+    for manual_input in manual_inputs:
+        currency = manual_input.currency
+        amount = manual_input.amount
+
+        if currency in crypto_balances:
+            crypto_balances[currency] += amount
+        else:
+            crypto_balances[currency] = amount
 
     # convert balances to FIAT
     for currency in crypto_balances:
@@ -229,7 +239,7 @@ def signup(request):
 
 @login_required
 @transaction.atomic
-def changeDetails(request):
+def change_details(request):
     if request.method == 'POST':
         form = forms.UserChangeDetailsForm(request.POST, instance=request.user)
         fiat_form = forms.UserChangeFiatForm(
@@ -262,7 +272,7 @@ def changeDetails(request):
 
 
 @login_required
-def changePassword(request):
+def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -293,7 +303,7 @@ def handler500(request):
 
 
 @login_required
-def refreshBalances(request):
+def refresh_balances(request):
     exchange_accounts = models.ExchangeAccount.objects.filter(
         user=request.user)
     has_errors, errors = models.update_exchange_balances(exchange_accounts)
@@ -304,7 +314,7 @@ def refreshBalances(request):
 
 
 @login_required
-def removeExchange(request, exchange_id):
+def remove_exchange(request, exchange_id):
     exchange = get_object_or_404(models.Exchange, pk=exchange_id)
 
     try:
@@ -314,7 +324,7 @@ def removeExchange(request, exchange_id):
         )
 
         exchange_account.delete()
-        messages.success(request, 'Exhange removed!')
+        messages.success(request, 'Exchange removed!')
 
     except ObjectDoesNotExist:
         messages.warning(
@@ -364,3 +374,48 @@ def login(request):
     }
 
     return render(request, 'login.html', context)
+
+
+@login_required
+def manual_input(request):
+    if request.method == 'POST':
+        form = forms.ManualInputForm(request.POST)
+        if form.is_valid():
+            manual_input = models.ManualInput(user=request.user)
+
+            manual_input.currency = form.cleaned_data.get('currency').name
+            manual_input.amount = form.cleaned_data.get('amount')
+
+            manual_input.save()
+            messages.success(request, 'Balance added successfully!')
+
+            return redirect('manual_input')
+        else:
+            messages.warning(request, 'There was an error adding balance!')
+    else:
+        form = forms.ManualInputForm()
+        balances = models.ManualInput.objects.filter(user=request.user)
+
+    context = {
+        'form': form,
+        'balances': balances
+    }
+    return render(request, 'manual.html', context)
+
+
+@login_required
+def remove_manual_input(request, manual_input_id):
+    try:
+        manual_input = models.ManualInput.objects.filter(
+            user=request.user,
+            id=manual_input_id
+        )
+
+        manual_input.delete()
+        messages.success(request, 'Balance removed!')
+
+    except ObjectDoesNotExist:
+        messages.warning(
+            request, 'There was an error removing balance from your account!')
+
+    return redirect('manual_input')

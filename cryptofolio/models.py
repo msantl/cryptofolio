@@ -11,6 +11,7 @@ from .api.API import API
 
 class Currency(models.Model):
     name = models.CharField(max_length=10, primary_key=True)
+    crypto = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -63,6 +64,17 @@ class ExchangeBalance(models.Model):
             self.currency,
             self.timestamp,
             self.most_recent)
+
+
+class ManualInput(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now=True)
+    currency = models.CharField(max_length=50, default='BTC')
+    amount = models.FloatField(default=None, blank=True, null=True)
+
+    def __str__(self):
+        return "%s %s %s %s" % (self.user.username, self.timestamp,
+                                self.currency. self.amount)
 
 
 def update_exchange_balances(exchange_accounts):
