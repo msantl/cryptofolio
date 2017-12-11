@@ -9,7 +9,7 @@
     <div class="pt-2">
         <form method="post">
             {% csrf_token %}
-        
+
             <div class="form-group">
                 {% if form.key.errors %}
                 {% for error in form.key.errors %}
@@ -25,12 +25,12 @@
                         </label>
                     </div>
                     <div class="col-md-8">
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             class="form-control"
-                            id="{{ form.key.id_for_label }}" 
-                            name="{{ form.key.name }}" 
-                            value="{{ form.key.value|default_if_none:"" }}" 
+                            id="{{ form.key.id_for_label }}"
+                            name="{{ form.key.name }}"
+                            value="{{ form.key.value|default_if_none:"" }}"
                         />
                         {% if form.key.help_text %}
                         <small class="form-text text-muted">
@@ -40,7 +40,7 @@
                     </div>
                 </div>
             </div>
-        
+
             <div class="form-group">
                 {% if form.secret.errors %}
                 {% for error in form.secret.errors %}
@@ -56,12 +56,12 @@
                         </label>
                     </div>
                     <div class="col-md-8">
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             class="form-control"
-                            id="{{ form.secret.id_for_label }}" 
-                            name="{{ form.secret.name }}" 
-                            value="{{ form.secret.value|default_if_none:"" }}" 
+                            id="{{ form.secret.id_for_label }}"
+                            name="{{ form.secret.name }}"
+                            value="{{ form.secret.value|default_if_none:"" }}"
                         />
                         {% if form.secret.help_text %}
                         <small class="form-text text-muted">
@@ -87,12 +87,12 @@
                         </label>
                     </div>
                     <div class="col-md-8">
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             class="form-control"
-                            id="{{ form.passphrase.id_for_label }}" 
-                            name="{{ form.passphrase.name }}" 
-                            value="{{ form.passphrase.value|default_if_none:"" }}" 
+                            id="{{ form.passphrase.id_for_label }}"
+                            name="{{ form.passphrase.name }}"
+                            value="{{ form.passphrase.value|default_if_none:"" }}"
                         />
                         {% if form.passphrase.help_text %}
                         <small class="form-text text-muted">
@@ -102,14 +102,14 @@
                     </div>
                 </div>
             </div>
- 
-        
+
+
             <button type="submit" class="btn btn-primary">Update</button>
         </form>
     </div>
     {% if stored_credentials %}
     <div class="pt-2">
-	<form action="{% url 'removeExchange' exchange.name  %}">
+	<form action="{% url 'remove_exchange' exchange.name  %}">
 		{% csrf_token %}
 		<input class="btn btn-danger" type="submit" value="Remove"/>
 	</form>

@@ -40,13 +40,19 @@ urlpatterns = [
     url(r'^settings/$', views.settings, name='settings'),
     url(r'^settings/exchange/(?P<exchange_id>[0-9A-Za-z]+)/$',
         views.exchange, name='exchange'),
-    url(r'^refreshBalances/$', views.refreshBalances, name='refreshBalances'),
-    url(r'^settings/details/$', views.changeDetails, name='details'),
-    url(r'^settings/password/$', views.changePassword, name='password'),
+    url(r'^refresh_balances/$', views.refresh_balances, name='refresh_balances'),
+    url(r'^settings/details/$', views.change_details, name='details'),
+    url(r'^settings/password/$', views.change_password, name='password'),
     url(
         r'^settings/exchange/(?P<exchange_id>[0-9A-Za-z]+)/remove$',
-        views.removeExchange,
-        name='removeExchange'
+        views.remove_exchange,
+        name='remove_exchange'
     ),
     url(r'^policy/$', views.policy, name='policy'),
+    url(r'^settings/manual_input$', views.manual_input, name='manual_input'),
+    url(
+        r'^settings/manual_input/(?P<manual_input_id>[0-9A-Za-z]+)/remove$',
+        views.remove_manual_input,
+        name='remove_manual_input'
+    ),
 ]

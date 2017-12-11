@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Manual Balance Entry {% endblock %}
+
+{% block content %}
+<div>
+    <div class="pt-2">
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                {% if form.currency.errors %}
+                {% for error in form.currency.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error|safe }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <label for="{{ form.currency.id_for_label }}">
+                            {{ form.currency.label }}:
+                        </label>
+                    </div>
+                    <div class="col-md-8">
+                        <select
+                            class="form-control"
+                            id="{{ form.currency.id_for_label }}"
+                            name="{{ form.currency.name }}">
+                            {% for value, text in form.currency.field.choices %}
+                            <option value={{ value }} {% if value|stringformat:"s" == form.currency.value %} selected {% endif %}>
+                            {{ text|capfirst }}
+                            </option>
+                            {% endfor %}
+                        </select>
+
+                        {% if form.currency.help_text %}
+                        <small class="form-text text-muted">
+                            {{ form.currency.help_text|safe }}
+                        </small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                {% if form.amount.errors %}
+                {% for error in form.amount.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error|safe }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div class="form-row">
+                    <div class="col-md-4">
+                        <label for="{{ form.amount.id_for_label }}">
+                            {{ form.amount.label }}:
+                        </label>
+                    </div>
+                    <div class="col-md-8">
+                        <input
+                            type="text"
+                            class="form-control"
+                            id="{{ form.amount.id_for_label }}"
+                            name="{{ form.amount.name }}"
+                            value="{{ form.amount.value|default_if_none:"0" }}"
+                        />
+                        {% if form.amount.help_text %}
+                        <small class="form-text text-muted">
+                            {{ form.amount.help_text|safe }}
+                        </small>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+</div>
+
+<div class="pt-2">
+    {% if balances %}
+    <table class="table table-striped">
+        <thead>
+            <tr><th>Currency</th><th>Amount</th><th>Last modified</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+            {% for balance in balances %}
+            <tr>
+                <td>{{ balance.currency  }}</td>
+                <td>{{ balance.amount| floatformat:8 }}</td>
+                <td>{{ balance.timestamp }}</td>
+                <td>
+                    <form action="{% url 'remove_manual_input' balance.id  %}">
+                        {% csrf_token %}
+                        <input class="btn btn-danger" type="submit" value="Remove"/>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div
+
+{% endblock %}
+

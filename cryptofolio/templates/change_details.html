@@ -21,12 +21,12 @@
                 </label>
             </div>
             <div class="col-md-8">
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     class="form-control"
-                    id="{{ form.first_name.id_for_label }}" 
-                    name="{{ form.first_name.name }}" 
-                    value="{{ form.first_name.value }}" 
+                    id="{{ form.first_name.id_for_label }}"
+                    name="{{ form.first_name.name }}"
+                    value="{{ form.first_name.value }}"
                     placeholder="John"
                  />
                 {% if form.first_name.help_text %}
@@ -53,12 +53,12 @@
                 </label>
             </div>
             <div class="col-md-8">
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     class="form-control"
-                    id="{{ form.last_name.id_for_label }}" 
-                    name="{{ form.last_name.name }}" 
-                    value="{{ form.last_name.value }}" 
+                    id="{{ form.last_name.id_for_label }}"
+                    name="{{ form.last_name.name }}"
+                    value="{{ form.last_name.value }}"
                     placeholder="Doe"
                  />
                 {% if form.last_name.help_text %}
@@ -85,9 +85,9 @@
                 </label>
             </div>
             <div class="col-md-8">
-                <select 
+                <select
                     class="form-control"
-                    id="{{ fiat_form.fiat.id_for_label }}" 
+                    id="{{ fiat_form.fiat.id_for_label }}"
                     name="{{ fiat_form.fiat.name }}">
                     {% for value, text in fiat_form.fiat.field.choices %}
                     <option value={{ value }} {% if value|stringformat:"s" == fiat_form.fiat.value %} selected {% endif %}>
