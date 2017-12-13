@@ -7,15 +7,13 @@ from django.contrib.auth import (
     REDIRECT_FIELD_NAME,
     login as auth_login,
     authenticate,
-    update_session_auth_hash
-)
+    update_session_auth_hash)
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
-from django.db.models import Max, Q
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404, resolve_url
 from django.template import RequestContext
@@ -29,9 +27,13 @@ from . import models
 
 from .api.Coinmarket import Coinmarket
 
+import time
+import datetime
+
 
 @login_required
 def home(request):
+    fiat = request.user.userprofile.fiat
     exchange_accounts = models.ExchangeAccount.objects.filter(
         user=request.user)
     manual_inputs = models.ManualInput.objects.filter(user=request.user)
@@ -39,39 +41,13 @@ def home(request):
     if not exchange_accounts and not manual_inputs:
         return render(request, 'home.html', {'has_data': False})
 
-    fiat = request.user.userprofile.fiat
-
     # get current rates
     market = Coinmarket()
     rates = market.getRates(fiat)
     balances = []
     other_balances = []
-    crypto_balances = {}
-
-    for exchange_account in exchange_accounts:
-        exchange_balances = models.ExchangeBalance.objects.filter(
-            exchange_account=exchange_account,
-            most_recent=True
-        )
-
-        # aggregate latest balances
-        for exchange_balance in exchange_balances:
-            currency = exchange_balance.currency
-            amount = exchange_balance.amount
-
-            if currency in crypto_balances:
-                crypto_balances[currency] += amount
-            else:
-                crypto_balances[currency] = amount
-
-    for manual_input in manual_inputs:
-        currency = manual_input.currency
-        amount = manual_input.amount
-
-        if currency in crypto_balances:
-            crypto_balances[currency] += amount
-        else:
-            crypto_balances[currency] = amount
+    crypto_balances = models.get_aggregated_balances(
+        exchange_accounts, manual_inputs)
 
     # convert balances to FIAT
     for currency in crypto_balances:
@@ -100,27 +76,7 @@ def home(request):
             )
 
     xdata = [x['currency'] for x in balances]
-    crypto_ydata = [x['amount'] for x in balances]
     fiat_ydata = [x['amount_fiat'] for x in balances]
-
-    extra_serie = {
-        "tooltip": {"y_start": "", "y_end": " coins"},
-    }
-    chartdata = {'x': xdata, 'y1': crypto_ydata, 'extra1': extra_serie}
-    charttype = "pieChart"
-    chartcontainer = 'crypto_container'
-    crypto_piechart = {
-        'charttype': charttype,
-        'chartdata': chartdata,
-        'chartcontainer': chartcontainer,
-        'extra': {
-            'x_is_date': False,
-            'x_axis_format': '',
-            'tag_script_js': True,
-            'jquery_on_ready': False,
-        }
-    }
-
     extra_serie = {
         "tooltip": {"y_start": "", "y_end": " " + fiat},
     }
@@ -139,6 +95,36 @@ def home(request):
         }
     }
 
+    # time series
+    user_time_series = models.TimeSeries.objects.filter(
+        user=request.user, fiat=fiat)
+
+    def to_timestamp(x): return int(time.mktime(x.timetuple()) * 1000)
+    xdata = [to_timestamp(entry.timestamp) for entry in user_time_series]
+    ydata = [entry.amount for entry in user_time_series]
+
+    time_series = {
+        'charttype': "lineChart",
+        'chartcontainer': 'time_series_container',
+        'chartdata': {
+            'x': xdata,
+            'name1': 'Balance',
+            'y1': ydata,
+            'extra1': {
+                "tooltip": {
+                    "y_start": "You had ",
+                    "y_end": fiat
+                },
+            }
+        },
+        'extra': {
+            'x_is_date': True,
+            "x_axis_format": "%d %b %H:%M",
+            'tag_script_js': True,
+            'jquery_on_ready': False,
+        }
+    }
+
     return render(
         request,
         'home.html',
@@ -148,8 +134,8 @@ def home(request):
             'other_balances': other_balances,
             'fiat_sum': sum(fiat_ydata),
             'has_data': True,
-            'crypto_piechart': crypto_piechart,
             'fiat_piechart': fiat_piechart,
+            'time_series': time_series,
         }
     )
 
@@ -197,9 +183,7 @@ def exchange(request, exchange_id):
                 exchange=exchange
             )
             exchange_balances = models.ExchangeBalance.objects.filter(
-                exchange_account=exchange_account,
-                most_recent=True
-            )
+                exchange_account=exchange_account)
 
             form = forms.ExchangeAccountForm(instance=exchange_account)
         except ObjectDoesNotExist:
@@ -333,6 +317,20 @@ def remove_exchange(request, exchange_id):
     return redirect('exchange', exchange_id=exchange_id)
 
 
+@login_required
+def remove_balances(request):
+    try:
+        exchange_accounts = models.ExchangeAccount.objects.filter(
+            user=request.user)
+        for exchange_account in exchange_accounts:
+            exchange_account.delete()
+        messages.success(request, 'Balances removed!')
+    except Exception as e:
+        messages.warning(
+            request, 'There was an error removing balances from your account!')
+    return redirect('settings')
+
+
 def policy(request):
     return render(request, 'policy.html', {})
 
@@ -378,22 +376,19 @@ def login(request):
 
 @login_required
 def manual_input(request):
+    manual_input = models.ManualInput(user=request.user)
+    balances = []
+
     if request.method == 'POST':
-        form = forms.ManualInputForm(request.POST)
+        form = forms.ManualInputForm(request.POST, instance=manual_input)
         if form.is_valid():
-            manual_input = models.ManualInput(user=request.user)
-
-            manual_input.currency = form.cleaned_data.get('currency').name
-            manual_input.amount = form.cleaned_data.get('amount')
-
-            manual_input.save()
+            form.save()
             messages.success(request, 'Balance added successfully!')
-
             return redirect('manual_input')
         else:
             messages.warning(request, 'There was an error adding balance!')
     else:
-        form = forms.ManualInputForm()
+        form = forms.ManualInputForm(instance=manual_input)
         balances = models.ManualInput.objects.filter(user=request.user)
 
     context = {

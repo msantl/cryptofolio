@@ -8,8 +8,8 @@
 <head>
     {% if has_data == True %}
     {% include_chart_jscss %}
-    {% load_chart crypto_piechart.charttype crypto_piechart.chartdata crypto_piechart.chartcontainer crypto_piechart.extra %}
     {% load_chart fiat_piechart.charttype fiat_piechart.chartdata fiat_piechart.chartcontainer fiat_piechart.extra %}
+    {% load_chart time_series.charttype time_series.chartdata time_series.chartcontainer time_series.extra %}
     {% endif %}
 </head>
 <body>
@@ -22,12 +22,9 @@
             </label>
         </div>
         <div class="col-md-8">
-            <input
-                type="text"
-                class="form-control"
-                disabled
-                value="{{ fiat_sum|floatformat:-8 }} {{ fiat }}"
-             />
+            <span>
+                {{ fiat_sum|floatformat:-8 }} {{ fiat }}
+            </span>
         </div>
     </div>
 
@@ -80,18 +77,15 @@
         </table>
     </div>
     <hr>
-
     <div>
         <h3>Balances in {{ fiat }}</h3>
         {% include_container fiat_piechart.chartcontainer 400 '100%' %}
     </div>
     <hr>
-
     <div>
-        <h3>Balances</h3>
-        {% include_container crypto_piechart.chartcontainer 400 '100%' %}
+        <h3>Cryptocurrency holdings over time in {{ fiat  }}</h3>
+        {% include_container time_series.chartcontainer 400 '100%' %}
     </div>
-
     {% else %}
     <p>Nothing to show :(</p>
     <p>Please add API keys and secrets in <a href="{% url 'settings' %}">settings</a>!</p>

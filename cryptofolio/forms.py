@@ -59,5 +59,5 @@ class ManualInputForm(forms.ModelForm):
 
     class Meta:
         model = models.ManualInput
-        fields = ('currency', 'amount')
+        fields = ('currency', 'amount', )
 

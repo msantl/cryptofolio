@@ -53,28 +53,37 @@ class ExchangeBalance(models.Model):
         ExchangeAccount,
         on_delete=models.CASCADE
     )
-    currency = models.CharField(max_length=50)
+    currency = models.CharField(max_length=10)
     amount = models.FloatField(default=None, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now=True)
-    most_recent = models.BooleanField(default=True)
 
     def __str__(self):
         return "%s %s %s %s" % (
             self.exchange_account,
             self.currency,
-            self.timestamp,
-            self.most_recent)
+            self.timestamp)
 
 
 class ManualInput(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now=True)
-    currency = models.CharField(max_length=50, default='BTC')
+    currency = models.CharField(max_length=10)
     amount = models.FloatField(default=None, blank=True, null=True)
 
     def __str__(self):
         return "%s %s %s %s" % (self.user.username, self.timestamp,
-                                self.currency. self.amount)
+                                self.currency, self.amount)
+
+
+class TimeSeries(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now=True)
+    amount = models.FloatField(default=None, blank=True, null=True)
+    fiat = models.CharField(max_length=10, default='USD')
+
+    def __str__(self):
+        return "%s %s %s %s" % (self.user.username, self.timestamp,
+                                self.amount, self.fiat)
 
 
 def update_exchange_balances(exchange_accounts):
@@ -88,24 +97,39 @@ def update_exchange_balances(exchange_accounts):
             has_errors = True
             errors.append(error)
         else:
-            reset_most_recent_field(exchange_account)
-
             for currency in balances:
-                exchange_balance = ExchangeBalance(
+                exchange_balance, created = ExchangeBalance.objects.get_or_create(
                     exchange_account=exchange_account,
-                    currency=currency,
-                    amount=balances[currency],
-                    most_recent=True
-                )
+                    currency=currency)
+
+                exchange_balance.amount = balances[currency]
                 exchange_balance.save()
     return (has_errors, errors)
 
 
-def reset_most_recent_field(exchange_account):
-    old_balances = ExchangeBalance.objects.filter(
-        exchange_account=exchange_account,
-        most_recent=True
-    )
-    for balance in old_balances:
-        balance.most_recent = False
-        balance.save()
+def get_aggregated_balances(exchange_accounts, manual_inputs):
+    crypto_balances = {}
+    for exchange_account in exchange_accounts:
+        exchange_balances = ExchangeBalance.objects.filter(
+            exchange_account=exchange_account)
+
+        # aggregate latest balances
+        for exchange_balance in exchange_balances:
+            currency = exchange_balance.currency
+            amount = exchange_balance.amount
+
+            if currency in crypto_balances:
+                crypto_balances[currency] += amount
+            else:
+                crypto_balances[currency] = amount
+
+    for manual_input in manual_inputs:
+        currency = manual_input.currency
+        amount = manual_input.amount
+
+        if currency in crypto_balances:
+            crypto_balances[currency] += amount
+        else:
+            crypto_balances[currency] = amount
+
+    return crypto_balances

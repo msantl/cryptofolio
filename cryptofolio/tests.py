@@ -109,3 +109,27 @@ class ExchangeBalanceTests(TestCase):
 
         self.assertEqual(exchange_balance.currency, test_currency)
         self.assertEqual(exchange_balance.amount, test_amount)
+
+
+class ManualInputTest(TestCase):
+    def test_create(self):
+        manual_input = models.ManualInput(
+            user=create_test_user(),
+            currency=get_test_currency(),
+            amount=get_test_amount()
+        )
+
+        self.assertEqual(manual_input.currency, get_test_currency())
+        self.assertEqual(manual_input.amount, get_test_amount())
+
+class TimeSeriesTest(TestCase):
+    def test_create(self):
+        manual_input = models.TimeSeries(
+            user=create_test_user(),
+            fiat=get_test_currency(),
+            amount=get_test_amount()
+        )
+
+        self.assertEqual(manual_input.fiat, get_test_currency())
+        self.assertEqual(manual_input.amount, get_test_amount())
+

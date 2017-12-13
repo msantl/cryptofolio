@@ -36,12 +36,23 @@
     <div class="row">
         <div class="col-md-8">
             {% if exchanges %}
-            <form method="post" action='/refresh_balances/'>
-                {% csrf_token %}
-                <button type="submit" class="btn btn-success">
-                    Refresh all balances
-                </button>
-            </form>
+            <div class="list-group">
+                <span class="list-group-item">
+                    <form method="post" action="{% url 'refresh_balances' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">
+                            Refresh all
+                        </button>
+                    </form>
+                    &nbsp;
+                    <form method="post" action="{% url 'remove_balances' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">
+                            Remove all
+                        </button>
+                    </form>
+                </span>
+            </div>
             {% endif %}
         </div>
     </div>
