@@ -1,5 +1,6 @@
 from coinmarketcap import Market
 
+
 class Coinmarket:
     def __init__(self):
         self.market = Market()
@@ -15,4 +16,3 @@ class Coinmarket:
                 market[currency] = float(t[price_key])
 
         return market
-

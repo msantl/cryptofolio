@@ -13,7 +13,7 @@
 
 ## Usage
 <b>Cryptofolio</b> has four main pages. The home page, settings page,
-exchange page and user profile page.
+manual balance entry page, exchange page and user profile page.
 
 ### Home
 <img src="/docs/home.png" width="600">
@@ -21,7 +21,13 @@ exchange page and user profile page.
 Home screen takes the current state in the cryptomarket and shows you how much
 are your cryptocurrency holdings worth at the given time.
 
-The refresh button updates balances from all exchanges you have configured.
+Your data is shown in one table and two graphs.
+The table shows how much of each cryptocurrency you hold and it's current value
+in fiat.
+The first graph is a piechart, which is a graphical representation of the table
+in the form of a piechart.
+The second graph is a historical time series graph, which shows how your
+holdings converted into fiat over time.
 
 ### Settings
 <img src="/docs/settings.png" width="600">
@@ -31,6 +37,9 @@ Exchange settings allow you to add API key, secret, and passphrase for an
 exchange that is available in Crypofolio.
 
 User settings allow you to change your details and your password.
+The Refresh All button will refresh balances from all exchanges that you've
+configured, and the Remove All button will remove all balances and API keys,
+secrets and passphrase from your profile.
 
 ### User Profile
 <img src="/docs/user_profile.png" width="600">
@@ -39,6 +48,15 @@ In User Profile settings you can change your first and last name, and the
 preffered FIAT currency.
 
 Cryptofolio will use this to summarize your holdings.
+
+### Manual Balance Entry
+<img src="/docs/manual.png" width="600">
+
+In Manual Balance Entry you can enter cryptocurrency that you hold offline or
+are uncomfortable syncing with Crpytofilo by an exchange.
+
+The amount will show just as if the data was pulled from an exchange, and it
+will be included in your summary.
 
 ### Exchange
 <img src="/docs/exchange.png" width="600">
@@ -112,8 +130,12 @@ The app should be served from `localhost:8000`.
 
 Open up the admin console at `localhost:8000/admin` and create new entries for
 `Currency` and `Exchange`. Those tables are used to list all supported FIAT
-currencies and Exchanges. So go ahead and add `USD` and `EUR` in `Currency`
-table, and `Binance`, `Bittrex`, `Coinbase`, `GDAX`, `Kraken`, `Liqui` and
-`Poloniex` in `Exchange` table.
+and crypto currencies, and Exchanges. So go ahead and add `USD` and `EUR`
+with unchecked `crypto` checkbox, and `BTC`, `ETC`, `LTC` with checked `crypto
+checkbox` in `Currency` table, and `Binance`, `Bittrex`, `Coinbase`, `GDAX`,
+`Kraken`, `Liqui` and `Poloniex` in `Exchange` table.
+
+`TimeSeries` table is supposed to be populated by a cronjob that runs `python
+manage.py update_balances` every hour.
 
 Now you're ready to use <b>Cryptofolio</b> locally!
