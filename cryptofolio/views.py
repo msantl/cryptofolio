@@ -104,7 +104,7 @@ def home(request):
     ydata = [entry.amount for entry in user_time_series]
 
     time_series = {
-        'charttype': "lineChart",
+        'charttype': "lineWithFocusChart",
         'chartcontainer': 'time_series_container',
         'chartdata': {
             'x': xdata,
