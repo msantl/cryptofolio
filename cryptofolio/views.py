@@ -29,64 +29,23 @@ from .api.Coinmarket import Coinmarket
 
 import time
 import datetime
+import itertools
 
 
-@login_required
-def home(request):
-    fiat = request.user.userprofile.fiat
-    exchange_accounts = models.ExchangeAccount.objects.filter(
-        user=request.user)
-    manual_inputs = models.ManualInput.objects.filter(user=request.user)
-
-    if not exchange_accounts and not manual_inputs:
-        return render(request, 'home.html', {'has_data': False})
-
-    # get current rates
-    market = Coinmarket()
-    rates = market.getRates(fiat)
-    balances = []
-    other_balances = []
-    crypto_balances = models.get_aggregated_balances(
-        exchange_accounts, manual_inputs)
-
-    # convert balances to FIAT
-    for currency in crypto_balances:
-        if currency in rates:
-            balances.append(
-                {
-                    'currency': currency,
-                    'amount': crypto_balances[currency],
-                    'amount_fiat': crypto_balances[currency] * rates[currency],
+def __get_fiat_piechart(balances, fiat):
+    return {
+        'charttype': "pieChart",
+        'chartdata': {
+            'x': [x['currency'] for x in balances],
+            'y1': [x['amount_fiat'] for x in balances],
+            'extra1': {
+                "tooltip": {
+                    "y_start": "",
+                    "y_end": fiat
                 }
-            )
-        elif currency == fiat:
-            balances.append(
-                {
-                    'currency': currency,
-                    'amount': crypto_balances[currency],
-                    'amount_fiat': crypto_balances[currency],
-                }
-            )
-        else:
-            other_balances.append(
-                {
-                    'currency': currency,
-                    'amount': crypto_balances[currency]
-                }
-            )
-
-    xdata = [x['currency'] for x in balances]
-    fiat_ydata = [x['amount_fiat'] for x in balances]
-    extra_serie = {
-        "tooltip": {"y_start": "", "y_end": " " + fiat},
-    }
-    chartdata = {'x': xdata, 'y1': fiat_ydata, 'extra1': extra_serie}
-    charttype = "pieChart"
-    chartcontainer = 'fiat_container'
-    fiat_piechart = {
-        'charttype': charttype,
-        'chartdata': chartdata,
-        'chartcontainer': chartcontainer,
+            }
+        },
+        'chartcontainer': "fiat_container",
         'extra': {
             'x_is_date': False,
             'x_axis_format': '',
@@ -95,24 +54,19 @@ def home(request):
         }
     }
 
-    # time series
-    user_time_series = models.TimeSeries.objects.filter(
-        user=request.user, fiat=fiat)
 
+def __get_time_series_chart_old(user_time_series, fiat):
     def to_timestamp(x): return int(time.mktime(x.timetuple()) * 1000)
-    xdata = [to_timestamp(entry.timestamp) for entry in user_time_series]
-    ydata = [entry.amount for entry in user_time_series]
-
-    time_series = {
+    return {
         'charttype': "lineWithFocusChart",
         'chartcontainer': 'time_series_container',
         'chartdata': {
-            'x': xdata,
+            'x': [ to_timestamp(entry.timestamp) for entry in user_time_series ],
             'name1': 'Balance',
-            'y1': ydata,
+            'y1': [ entry.amount for entry in user_time_series ],
             'extra1': {
                 "tooltip": {
-                    "y_start": "You had ",
+                    "y_start": "",
                     "y_end": fiat
                 },
             }
@@ -125,17 +79,93 @@ def home(request):
         }
     }
 
+
+def __get_time_series_chart(balance_time_series, fiat):
+    xdata = []
+    ydata = []
+    ysum = []
+    currencies = set()
+
+    for k, g in itertools.groupby(balance_time_series, lambda x: x.timestamp):
+        def to_timestamp(x): return int(time.mktime(x.timetuple()) * 1000)
+        xdata.append(to_timestamp(k))
+        balances = {}
+        total = 0
+        for balance in g:
+            currencies.add(balance.currency)
+            total += balance.amount
+            balances[balance.currency] = balance.amount
+
+        ysum.append(total)
+        ydata.append(balances)
+
+    chartdata = {
+        'x': xdata,
+        'y1': ysum,
+        'name1': "Total",
+        'extra1': {"tooltip": {"y_start": "", "y_end": fiat}}
+    }
+
+    for i, currency in enumerate(currencies, start=2):
+        time_series = [y[currency] if currency in y else None for y in ydata]
+        chartdata['y{}'.format(i)] = time_series
+        chartdata['name{}'.format(i)] = currency
+        chartdata['extra{}'.format(i)] = {
+            "tooltip":
+            {
+                "y_start": "",
+                "y_end": fiat,
+            }
+        }
+
+    return {
+        'charttype': "lineWithFocusChart",
+        'chartcontainer': 'time_series_container',
+        'chartdata': chartdata,
+        'extra': {
+            'x_is_date': True,
+            "x_axis_format": "%d %b %H:%M",
+            'tag_script_js': True,
+            'jquery_on_ready': False,
+        }
+    }
+
+
+@login_required
+def home(request):
+    fiat = request.user.userprofile.fiat
+    exchange_accounts = models.ExchangeAccount.objects.filter(
+        user=request.user)
+    manual_inputs = models.ManualInput.objects.filter(user=request.user)
+
+    if not exchange_accounts and not manual_inputs:
+        return render(request, 'home.html', {'has_data': False})
+
+    market = Coinmarket()
+    crypto_balances = models.get_aggregated_balances(
+        exchange_accounts, manual_inputs)
+    balances, other_balances = market.convertToFiat(crypto_balances, fiat)
+
+#    balance_time_series = models.BalanceTimeSeries.objects.filter(
+#        user=request.user, fiat=fiat).order_by('timestamp')
+
+    user_time_series = models.TimeSeries.objects.filter(
+        user=request.user, fiat=fiat)
+
+    total = sum(x['amount_fiat'] for x in balances)
+
     return render(
         request,
         'home.html',
         {
+            'has_data': True,
             'fiat': fiat,
             'balances': balances,
             'other_balances': other_balances,
-            'fiat_sum': sum(fiat_ydata),
-            'has_data': True,
-            'fiat_piechart': fiat_piechart,
-            'time_series': time_series,
+            'fiat_sum': total,
+            'fiat_piechart': __get_fiat_piechart(balances, fiat),
+            'time_series': __get_time_series_chart_old(user_time_series, fiat),
+#            'time_series': __get_time_series_chart(balance_time_series, fiat),
         }
     )
 
@@ -333,10 +363,6 @@ def remove_balances(request):
 
 def policy(request):
     return render(request, 'policy.html', {})
-
-
-def get_latest_exchange_balances(exchange_balances):
-    return exchange_balances.filter(most_recent=True)
 
 
 @sensitive_post_parameters()

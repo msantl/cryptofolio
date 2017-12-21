@@ -16,3 +16,34 @@ class Coinmarket:
                 market[currency] = float(t[price_key])
 
         return market
+
+    def convertToFiat(self, crypto_balances, fiat):
+        balances = []
+        other_balances = []
+        rates = self.getRates(fiat)
+        for currency in crypto_balances:
+            if currency in rates:
+                balances.append(
+                    {
+                        'currency': currency,
+                        'amount': crypto_balances[currency],
+                        'amount_fiat': crypto_balances[currency] * rates[currency],
+                    }
+                )
+            elif currency == fiat:
+                balances.append(
+                    {
+                        'currency': currency,
+                        'amount': crypto_balances[currency],
+                        'amount_fiat': crypto_balances[currency],
+                    }
+                )
+            else:
+                other_balances.append(
+                    {
+                        'currency': currency,
+                        'amount': crypto_balances[currency]
+                    }
+                )
+
+        return (balances, other_balances)

@@ -1,10 +1,12 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 from cryptofolio.models import (
     ExchangeAccount,
     ExchangeBalance,
     ManualInput,
+    BalanceTimeSeries,
     TimeSeries,
     update_exchange_balances,
     get_aggregated_balances)
@@ -32,19 +34,23 @@ class Command(BaseCommand):
     def update_time_series(self, market, user):
         self.stdout.write("Updating time series for %s" % (user.email))
         fiat = user.userprofile.fiat
-        rates = market.getRates(fiat)
         exchange_accounts = ExchangeAccount.objects.filter(user=user)
         manual_inputs = ManualInput.objects.filter(user=user)
-        total = 0
 
         crypto_balances = get_aggregated_balances(
             exchange_accounts, manual_inputs)
+        balances, _ = market.convertToFiat(crypto_balances, fiat)
+        total = 0
 
-        for balance in crypto_balances:
-            if balance in rates:
-                total += crypto_balances[balance] * rates[balance]
-            elif balance == fiat:
-                total += crypto_balances[balance]
+        # this way all TimeSeries will have the same timestamp
+        now = timezone.now()
+
+        for balance in balances:
+            total += balance['amount_fiat']
+            entry = BalanceTimeSeries(
+                user=user, amount=balance['amount_fiat'],
+                currency=balance['currency'], fiat=fiat, timestamp=now)
+            entry.save()
 
         entry = TimeSeries(user=user, amount=total, fiat=fiat)
         entry.save()

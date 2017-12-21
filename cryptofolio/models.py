@@ -86,6 +86,18 @@ class TimeSeries(models.Model):
                                 self.amount, self.fiat)
 
 
+class BalanceTimeSeries(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField()
+    amount = models.FloatField(default=None, blank=True, null=True)
+    currency = models.CharField(max_length=10, default='BTC')
+    fiat = models.CharField(max_length=10, default='USD')
+
+    def __str__(self):
+        return "%s %s %s %s" % (self.user.username, self.timestamp,
+                                self.amount, self.currency)
+
+
 def update_exchange_balances(exchange_accounts):
     has_errors = False
     errors = []
