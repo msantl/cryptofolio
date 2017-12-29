@@ -10,10 +10,12 @@ class Coinmarket:
         market = {}
 
         for t in ticker:
-            currency = t['name'].upper()
+            name = t['symbol'].upper()
+            symbol = t['name'].upper()
             price_key = ("price_" + fiat).lower()
             if t[price_key]:
-                market[currency] = float(t[price_key])
+                market[name] = float(t[price_key])
+                market[symbol] = float(t[price_key])
 
         return market
 
