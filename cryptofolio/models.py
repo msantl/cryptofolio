@@ -109,6 +109,9 @@ def update_exchange_balances(exchange_accounts):
             has_errors = True
             errors.append(error)
         else:
+            exchange_balances = ExchangeBalance.objects.filter(
+                exchange_account=exchange_account)
+
             for currency in balances:
                 exchange_balance, created = ExchangeBalance.objects.get_or_create(
                     exchange_account=exchange_account,
@@ -116,6 +119,13 @@ def update_exchange_balances(exchange_accounts):
 
                 exchange_balance.amount = balances[currency]
                 exchange_balance.save()
+
+            for exchange_balance in exchange_balances:
+                currency = exchange_balance.currency
+                if currency not in balances:
+                    exchange_balance.delete()
+
+
     return (has_errors, errors)
 
 

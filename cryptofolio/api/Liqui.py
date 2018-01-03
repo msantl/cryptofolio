@@ -20,7 +20,7 @@ class Liqui:
             balances = {}
 
             for currency in result.keys():
-                name = currency.encode('utf-8').upper()
+                name = currency.upper()
                 value = float(result[currency])
 
                 if value > 0.0:
