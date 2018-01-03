@@ -23,8 +23,8 @@ class GDAX:
                 raise Exception(result['message'])
 
             for currency in result:
-                name = currency["currency"].encode('utf-8').upper()
-                value = float(currency["balance"].encode('utf-8'))
+                name = currency["currency"].upper()
+                value = float(currency["balance"])
 
                 if value > 0.0:
                     balances[name] = value

@@ -20,8 +20,8 @@ class Binance:
             balances = {}
 
             for currency in result['balances']:
-                name = currency['asset'].encode('utf-8').upper()
-                value = float(currency['free'].encode('utf-8'))
+                name = currency['asset'].upper()
+                value = float(currency['free'])
 
                 if value > 0.0:
                     balances[name] = value

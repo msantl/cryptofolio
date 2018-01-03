@@ -28,7 +28,7 @@ class Kraken:
                 # remove first symbol ('Z' or 'X')
                 name_trimmed = currency[1:] if len(currency) == 4 else currency
 
-                name = name_trimmed.encode('utf-8').upper()
+                name = name_trimmed.upper()
                 value = float(balance[currency])
 
                 if value > 0.0:

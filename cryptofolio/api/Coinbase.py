@@ -20,8 +20,8 @@ class Coinbase:
             balances = {}
 
             for currency in result["data"]:
-                name = currency["balance"]["currency"].encode('utf-8').upper()
-                value = float(currency["balance"]["amount"].encode('utf-8'))
+                name = currency["balance"]["currency"].upper()
+                value = float(currency["balance"]["amount"])
 
                 if value > 0.0:
                     balances[name] = value
