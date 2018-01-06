@@ -1,5 +1,6 @@
 from binance.client import Client
 
+from .Config import Config
 from .Logger import Logger
 from .ExchangeException import ExchangeException
 
@@ -23,7 +24,7 @@ class Binance:
                 name = currency['asset'].upper()
                 value = float(currency['free'])
 
-                if value > 0.0:
+                if value >= Config.BALANCE_ZERO:
                     balances[name] = value
 
             return balances

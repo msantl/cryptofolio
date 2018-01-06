@@ -7,3 +7,5 @@ class Config:
     GDAX="GDAX"
     KRAKEN="Kraken"
 
+    BALANCE_ZERO=0.00000001
+

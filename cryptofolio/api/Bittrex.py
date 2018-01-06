@@ -1,5 +1,6 @@
 from bittrex import Bittrex as Client
 
+from .Config import Config
 from .Logger import Logger
 from .ExchangeException import ExchangeException
 
@@ -26,7 +27,7 @@ class Bittrex:
                 name = currency["Currency"]["Currency"]
                 value = currency["Balance"]["Balance"]
 
-                if value > 0.0:
+                if value >= Config.BALANCE_ZERO:
                     balances[name] = value
 
             return balances

@@ -1,5 +1,6 @@
 from coinbase.wallet.client import Client
 
+from .Config import Config
 from .Logger import Logger
 from .ExchangeException import ExchangeException
 
@@ -23,7 +24,7 @@ class Coinbase:
                 name = currency["balance"]["currency"].upper()
                 value = float(currency["balance"]["amount"])
 
-                if value > 0.0:
+                if value >= Config.BALANCE_ZERO:
                     balances[name] = value
 
             return balances

@@ -1,7 +1,8 @@
+from krakenex import API as Client
+
+from .Config import Config
 from .Logger import Logger
 from .ExchangeException import ExchangeException
-
-from krakenex import API as Client
 
 
 class Kraken:
@@ -31,7 +32,7 @@ class Kraken:
                 name = name_trimmed.upper()
                 value = float(balance[currency])
 
-                if value > 0.0:
+                if value >= Config.BALANCE_ZERO:
                     balances[name] = value
 
             return balances
