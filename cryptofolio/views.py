@@ -146,11 +146,11 @@ def home(request):
         exchange_accounts, manual_inputs)
     balances, other_balances = market.convertToFiat(crypto_balances, fiat)
 
-    balance_time_series = models.BalanceTimeSeries.objects.filter(
-        user=request.user, fiat=fiat).order_by('timestamp')
+#    balance_time_series = models.BalanceTimeSeries.objects.filter(
+#        user=request.user, fiat=fiat).order_by('timestamp')
 
-#    user_time_series = models.TimeSeries.objects.filter(
-#        user=request.user, fiat=fiat)
+    user_time_series = models.TimeSeries.objects.filter(
+        user=request.user, fiat=fiat)
 
     total_fiat = sum(x['amount_fiat'] for x in balances)
 
@@ -167,8 +167,8 @@ def home(request):
             'other_balances': other_balances,
             'fiat_sum': total_fiat,
             'fiat_piechart': __get_fiat_piechart(balances, fiat),
-#            'time_series': __get_time_series_chart_old(user_time_series, fiat),
-            'time_series': __get_time_series_chart(balance_time_series, fiat),
+            'time_series': __get_time_series_chart_old(user_time_series, fiat),
+#            'time_series': __get_time_series_chart(balance_time_series, fiat),
         }
     )
 
