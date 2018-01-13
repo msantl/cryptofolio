@@ -146,13 +146,16 @@ def home(request):
         exchange_accounts, manual_inputs)
     balances, other_balances = market.convertToFiat(crypto_balances, fiat)
 
-#    balance_time_series = models.BalanceTimeSeries.objects.filter(
-#        user=request.user, fiat=fiat).order_by('timestamp')
+    balance_time_series = models.BalanceTimeSeries.objects.filter(
+        user=request.user, fiat=fiat).order_by('timestamp')
 
-    user_time_series = models.TimeSeries.objects.filter(
-        user=request.user, fiat=fiat)
+#    user_time_series = models.TimeSeries.objects.filter(
+#        user=request.user, fiat=fiat)
 
-    total = sum(x['amount_fiat'] for x in balances)
+    total_fiat = sum(x['amount_fiat'] for x in balances)
+
+    for balance in balances:
+        balance['amount_fiat_pct'] = 100. * balance['amount_fiat']  / total_fiat
 
     return render(
         request,
@@ -162,10 +165,10 @@ def home(request):
             'fiat': fiat,
             'balances': balances,
             'other_balances': other_balances,
-            'fiat_sum': total,
+            'fiat_sum': total_fiat,
             'fiat_piechart': __get_fiat_piechart(balances, fiat),
-            'time_series': __get_time_series_chart_old(user_time_series, fiat),
-#            'time_series': __get_time_series_chart(balance_time_series, fiat),
+#            'time_series': __get_time_series_chart_old(user_time_series, fiat),
+            'time_series': __get_time_series_chart(balance_time_series, fiat),
         }
     )
 

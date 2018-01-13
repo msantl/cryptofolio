@@ -70,7 +70,10 @@
                 <tr>
                     <td>{{ balance.currency }}</td>
                     <td>{{ balance.amount|floatformat:-8 }}</td>
-                    <td>{{ balance.amount_fiat|floatformat:-8 }}</td>
+                    <td>
+                        {{ balance.amount_fiat|floatformat:-8 }}
+                        ({{ balance.amount_fiat_pct|floatformat:-2 }}%)
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
