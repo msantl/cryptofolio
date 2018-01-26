@@ -7,6 +7,7 @@ from django.db import models
 from encrypted_model_fields.fields import EncryptedCharField
 
 from .api.API import API
+from .api.BalanceFromAddress import BalanceFromAddress
 
 
 class Currency(models.Model):
@@ -75,6 +76,18 @@ class ManualInput(models.Model):
                                 self.currency, self.amount)
 
 
+class AddressInput(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now=True)
+    currency = models.CharField(max_length=10)
+    address = models.CharField(max_length=100)
+    amount = models.FloatField(default=None, blank=True, null=True)
+
+    def __str__(self):
+        return "%s %s %s %s %s" % (self.user.username, self.timestamp,
+                                   self.currency, self.address, self.amount)
+
+
 class TimeSeries(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now=True)
@@ -125,11 +138,20 @@ def update_exchange_balances(exchange_accounts):
                 if currency not in balances:
                     exchange_balance.delete()
 
-
     return (has_errors, errors)
 
+def update_address_input_balances(user):
+    address_api = BalanceFromAddress()
+    address_inputs = AddressInput.objects.filter(user=user)
 
-def get_aggregated_balances(exchange_accounts, manual_inputs):
+    result = address_api.getBalances(address_inputs)
+
+    for address_input in address_inputs:
+        address_input.amount = result[address_input.address]
+        address_input.save()
+
+
+def get_aggregated_balances(exchange_accounts, manual_inputs, address_inputs):
     crypto_balances = {}
     for exchange_account in exchange_accounts:
         exchange_balances = ExchangeBalance.objects.filter(
@@ -148,6 +170,15 @@ def get_aggregated_balances(exchange_accounts, manual_inputs):
     for manual_input in manual_inputs:
         currency = manual_input.currency
         amount = manual_input.amount
+
+        if currency in crypto_balances:
+            crypto_balances[currency] += amount
+        else:
+            crypto_balances[currency] = amount
+
+    for address_input in address_inputs:
+        currency = address_input.currency
+        amount = address_input.amount
 
         if currency in crypto_balances:
             crypto_balances[currency] += amount

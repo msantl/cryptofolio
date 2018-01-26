@@ -56,4 +56,10 @@ urlpatterns = [
         views.remove_manual_input,
         name='remove_manual_input'
     ),
+    url(r'^settings/address_input$', views.address_input, name='address_input'),
+    url(
+        r'^settings/address_input/(?P<address_input_id>[0-9A-Za-z]+)/remove$',
+        views.remove_address_input,
+        name='remove_address_input'
+    ),
 ]

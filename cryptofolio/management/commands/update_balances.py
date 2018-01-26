@@ -6,9 +6,11 @@ from cryptofolio.models import (
     ExchangeAccount,
     ExchangeBalance,
     ManualInput,
+    AddressInput,
     BalanceTimeSeries,
     TimeSeries,
     update_exchange_balances,
+    update_address_input_balances,
     get_aggregated_balances)
 from cryptofolio.api.Coinmarket import Coinmarket
 
@@ -29,6 +31,7 @@ class Command(BaseCommand):
                 for error in errors:
                     self.stderr.write("%s %s" % (user.email, error))
 
+            update_address_input_balances(user)
             self.update_time_series(market, user)
 
     def update_time_series(self, market, user):
@@ -36,9 +39,10 @@ class Command(BaseCommand):
         fiat = user.userprofile.fiat
         exchange_accounts = ExchangeAccount.objects.filter(user=user)
         manual_inputs = ManualInput.objects.filter(user=user)
+        address_inputs = AddressInput.objects.filter(user=user)
 
         crypto_balances = get_aggregated_balances(
-            exchange_accounts, manual_inputs)
+            exchange_accounts, manual_inputs, address_inputs)
         balances, _ = market.convertToFiat(crypto_balances, fiat)
         total = 0
 
