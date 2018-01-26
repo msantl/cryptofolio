@@ -49,6 +49,16 @@ preffered FIAT currency.
 
 Cryptofolio will use this to summarize your holdings.
 
+### Address Entry
+<img src="/docs/address.png" width="600">
+
+In Address Entry you can enter cryptocurrency and address pairs (ETH or BTC at
+the moment) if you have any offline wallets and you want to keep track of those
+funds also.
+
+The amount will show just as if the data was pulled from an exchange, and it
+will be included in your summary.
+
 ### Manual Balance Entry
 <img src="/docs/manual.png" width="600">
 
@@ -70,8 +80,8 @@ to remove the exchange together with all the balances.
 ### OS X and Linux
 
 Dependencies:
-* `python`
-* `pip`
+* `python3`
+* `pip3`
 * `mysql`
 * `bower`
 
@@ -95,6 +105,11 @@ need to create an account there and obtain the `sendgrid` API key.
 heroku slug commit or git commit hash, create an account there and get your
 `sentry` data source name (DSN).
 
+* `etherscan.io` to get balance for an ETH address. If you want to send API
+requests you need to create an accont and obtain an API key.
+
+* `blockchain.info` to get balance for a BTC address. If you want to send API
+requests you need to create an accont and obtain an API key.
 
 Environment variables:
 * `SECRET_KEY`
@@ -106,6 +121,7 @@ Environment variables:
 * `DB_HOST`
 * `DB_PORT`
 * `SENTRY_DSN`
+* `ETHERSCAN_API_KEY`
 
 Once you've set up those variables you can start setting up some base project
 settings.
@@ -131,11 +147,11 @@ The app should be served from `localhost:8000`.
 Open up the admin console at `localhost:8000/admin` and create new entries for
 `Currency` and `Exchange`. Those tables are used to list all supported FIAT
 and crypto currencies, and Exchanges. So go ahead and add `USD` and `EUR`
-with unchecked `crypto` checkbox, and `BTC`, `ETC`, `LTC` with checked `crypto
-checkbox` in `Currency` table, and `Binance`, `Bittrex`, `Coinbase`, `GDAX`,
+with unchecked `crypto` checkbox, and `BTC`, `ETC`, `LTC` with checked `crypto`
+checkbox in `Currency` table, and `Binance`, `Bittrex`, `Coinbase`, `GDAX`,
 `Kraken`, `Liqui` and `Poloniex` in `Exchange` table.
 
-`TimeSeries` table is supposed to be populated by a cronjob that runs `python
-manage.py update_balances` every hour.
+`TimeSeries` and `BalanceTimeSeries` tables are supposed to be populated by a
+cronjob that runs `python manage.py update_balances` every hour.
 
 Now you're ready to use <b>Cryptofolio</b> locally!
