@@ -26,6 +26,7 @@ from . import forms
 from . import models
 
 from .api.Coinmarket import Coinmarket
+from .api.BalanceFromAddress import BalanceFromAddress
 
 import time
 import datetime
@@ -61,9 +62,9 @@ def __get_time_series_chart_old(user_time_series, fiat):
         'charttype': "lineWithFocusChart",
         'chartcontainer': 'time_series_container',
         'chartdata': {
-            'x': [ to_timestamp(entry.timestamp) for entry in user_time_series ],
+            'x': [to_timestamp(entry.timestamp) for entry in user_time_series],
             'name1': 'Balance',
-            'y1': [ entry.amount for entry in user_time_series ],
+            'y1': [entry.amount for entry in user_time_series],
             'extra1': {
                 "tooltip": {
                     "y_start": "",
@@ -137,13 +138,14 @@ def home(request):
     exchange_accounts = models.ExchangeAccount.objects.filter(
         user=request.user)
     manual_inputs = models.ManualInput.objects.filter(user=request.user)
+    address_inputs = models.AddressInput.objects.filter(user=request.user)
 
-    if not exchange_accounts and not manual_inputs:
+    if not exchange_accounts and not manual_inputs and not address_inputs:
         return render(request, 'home.html', {'has_data': False})
 
     market = Coinmarket()
     crypto_balances = models.get_aggregated_balances(
-        exchange_accounts, manual_inputs)
+        exchange_accounts, manual_inputs, address_inputs)
     balances, other_balances = market.convertToFiat(crypto_balances, fiat)
 
 #    balance_time_series = models.BalanceTimeSeries.objects.filter(
@@ -155,7 +157,7 @@ def home(request):
     total_fiat = sum(x['amount_fiat'] for x in balances)
 
     for balance in balances:
-        balance['amount_fiat_pct'] = 100. * balance['amount_fiat']  / total_fiat
+        balance['amount_fiat_pct'] = 100. * balance['amount_fiat'] / total_fiat
 
     return render(
         request,
@@ -168,7 +170,7 @@ def home(request):
             'fiat_sum': total_fiat,
             'fiat_piechart': __get_fiat_piechart(balances, fiat),
             'time_series': __get_time_series_chart_old(user_time_series, fiat),
-#            'time_series': __get_time_series_chart(balance_time_series, fiat),
+            #            'time_series': __get_time_series_chart(balance_time_series, fiat),
         }
     )
 
@@ -443,3 +445,56 @@ def remove_manual_input(request, manual_input_id):
             request, 'There was an error removing balance from your account!')
 
     return redirect('manual_input')
+
+
+@login_required
+def address_input(request):
+    address_input = models.AddressInput(user=request.user)
+    balances = []
+
+    if request.method == 'POST':
+        form = forms.AddressInputForm(request.POST, instance=address_input)
+        if form.is_valid():
+            address_api = BalanceFromAddress()
+            currency = form.cleaned_data['currency']
+            address = form.cleaned_data['address']
+            amount = address_api.getSingleBalance(currency, address)
+
+            address_input = models.AddressInput.objects.create(
+                user=request.user,
+                currency=currency,
+                address=address,
+                amount=amount
+            )
+
+            messages.success(request, 'Address added successfully!')
+            return redirect('address_input')
+        else:
+            messages.warning(request, 'There was an error adding address!')
+    else:
+        form = forms.AddressInputForm(instance=address_input)
+        balances = models.AddressInput.objects.filter(user=request.user)
+
+    context = {
+        'form': form,
+        'balances': balances
+    }
+    return render(request, 'address_input.html', context)
+
+
+@login_required
+def remove_address_input(request, address_input_id):
+    try:
+        address_input = models.AddressInput.objects.filter(
+            user=request.user,
+            id=address_input_id
+        )
+
+        address_input.delete()
+        messages.success(request, 'Address removed!')
+
+    except ObjectDoesNotExist:
+        messages.warning(
+            request, 'There was an error removing address from your account!')
+
+    return redirect('address_input')
