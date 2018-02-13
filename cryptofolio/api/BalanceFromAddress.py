@@ -1,5 +1,8 @@
 from .Blockchain import Blockchain
 from .Etherscan import Etherscan
+from .Chainz import Chainz
+from .Blockchair import Blockchair
+from .Ripple import Ripple
 from .Logger import Logger
 
 from time import sleep
@@ -9,7 +12,10 @@ class BalanceFromAddress:
         self.logger = Logger(__name__)
         self.handlers = {
             'BTC': Blockchain(),
-            'ETH': Etherscan()
+            'ETH': Etherscan(),
+            'LTC': Chainz(),
+            'BCH': Blockchair(),
+            'XRP': Ripple()
         }
 
     def getSingleBalance(self, currency, address):
@@ -27,5 +33,5 @@ class BalanceFromAddress:
         return result
 
     def getSupportedCurrencies():
-        supported_currencies = ['BTC', 'ETH']
+        supported_currencies = ['BTC', 'ETH', 'LTC', 'BCH', 'XRP']
         return zip(supported_currencies, supported_currencies)
