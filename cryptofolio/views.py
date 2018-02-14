@@ -157,7 +157,10 @@ def home(request):
     total_fiat = sum(x['amount_fiat'] for x in balances)
 
     for balance in balances:
-        balance['amount_fiat_pct'] = 100. * balance['amount_fiat'] / total_fiat
+        if total_fiat < 1e-9:
+            balance['amount_fiat_pct'] = 0.0
+        else:
+            balance['amount_fiat_pct'] = 100. * balance['amount_fiat'] / total_fiat
 
     return render(
         request,
