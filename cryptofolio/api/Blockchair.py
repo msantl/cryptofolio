@@ -11,7 +11,7 @@ class Blockchair:
                    '/dashboards/address/') + address
         try:
             response = requests.get(req_url)
-            return response.json()['data'][0]['sum_value_unspent']
+            return int(response.json()['data'][0]['sum_value_unspent'])/100000000
         except Exception as e:
             self.logger.log(e)
         return 0.0
