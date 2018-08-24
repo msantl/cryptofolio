@@ -24,7 +24,7 @@ class Binance:
                 name = currency['asset'].upper()
                 value = float(currency['free'])
 
-                if value >= Config.BALANCE_ZERO:
+                if value > Config.BALANCE_ZERO:
                     balances[name] = value
 
             return balances

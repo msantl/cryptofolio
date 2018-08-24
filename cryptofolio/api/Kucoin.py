@@ -1,31 +1,28 @@
-from gdax import AuthenticatedClient as Client
+from kucoin.client import Client
 
 from .Config import Config
 from .Logger import Logger
 from .ExchangeException import ExchangeException
 
 
-class GDAX:
-    def __init__(self, key, secret, passphrase):
+class Kucoin:
+    def __init__(self, key, secret):
         self.logger = Logger(__name__)
 
         try:
-            self.client = Client(key, secret, passphrase)
+            self.client = Client(key, secret)
         except Exception as e:
             self.logger.log(e)
             raise ExchangeException(self.__class__.__name__, e)
 
     def getBalances(self):
         try:
-            result = self.client.get_accounts()
+            result = self.client.get_all_balances()
             balances = {}
 
-            if 'message' in result:
-                raise Exception(result['message'])
-
             for currency in result:
-                name = currency["currency"].upper()
-                value = float(currency["balance"])
+                name = currency['coinType'].upper()
+                value = float(currency['balance'])
 
                 if value > Config.BALANCE_ZERO:
                     balances[name] = value

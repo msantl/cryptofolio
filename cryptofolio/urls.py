@@ -62,4 +62,10 @@ urlpatterns = [
         views.remove_address_input,
         name='remove_address_input'
     ),
+    url(r'^settings/investment$', views.investment_input, name='investment_input'),
+    url(
+        r'^settings/investment/(?P<investment_input_id>[0-9A-Za-z]+)/remove$',
+        views.remove_investment_input,
+        name='remove_investment_input'
+    ),
 ]

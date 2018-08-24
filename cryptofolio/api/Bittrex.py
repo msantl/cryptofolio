@@ -27,7 +27,7 @@ class Bittrex:
                 name = currency["Currency"]["Currency"]
                 value = currency["Balance"]["Balance"]
 
-                if value >= Config.BALANCE_ZERO:
+                if value > Config.BALANCE_ZERO:
                     balances[name] = value
 
             return balances

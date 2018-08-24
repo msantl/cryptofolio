@@ -44,7 +44,7 @@ class UserChangeDetailsForm(forms.ModelForm):
 
 class UserChangeFiatForm(forms.ModelForm):
     fiat = forms.ModelChoiceField(
-        queryset=models.Currency.objects.filter(crypto=False),
+        queryset=models.Fiat.objects.all(),
         empty_label=None,
         help_text='<ul><li>Preffered currency</li></ul>')
 
@@ -55,7 +55,7 @@ class UserChangeFiatForm(forms.ModelForm):
 
 class ManualInputForm(forms.ModelForm):
     currency = forms.ModelChoiceField(
-        queryset=models.Currency.objects.filter(crypto=True),
+        queryset=models.Currency.objects.all(),
         empty_label=None)
 
     class Meta:
@@ -70,3 +70,14 @@ class AddressInputForm(forms.ModelForm):
     class Meta:
         model = models.AddressInput
         fields = ('currency', 'address', )
+
+class InvestmentForm(forms.ModelForm):
+    fiat = forms.ModelChoiceField(
+            queryset=models.Fiat.objects.all(),
+            empty_label=None,
+            help_text='<ul><li>Invested fiat currency</li></ul>')
+
+    class Meta:
+        model = models.Investment
+        fields = ('amount', 'fiat')
+
