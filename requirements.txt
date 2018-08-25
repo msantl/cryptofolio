@@ -31,6 +31,7 @@ krakenex==2.0.0
 liqui==1.0.1
 MarkupSafe==1.0
 mysqlclient==1.3.12
+pkg-resources==0.0.0
 poloniex==0.0.11
 pyasn1==0.4.2
 pyasn1-modules==0.2.1
