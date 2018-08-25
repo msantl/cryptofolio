@@ -6,7 +6,7 @@ bintrees==2.0.7
 certifi==2017.11.5
 cffi==1.11.2
 chardet==3.0.4
-coinbase==2.0.6
+coinbase==2.1.0
 coinmarketcap==5.0.3
 constantly==15.1.0
 cryptography==2.1.3
