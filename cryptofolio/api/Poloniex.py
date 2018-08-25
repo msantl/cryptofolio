@@ -24,7 +24,7 @@ class Poloniex:
                 name = currency.upper()
                 value = float(result[currency])
 
-                if value > Config.BALANCE_ZERO:
+                if value >= Config.BALANCE_ZERO:
                     balances[name] = value
 
             return balances

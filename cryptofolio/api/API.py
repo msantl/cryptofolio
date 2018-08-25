@@ -5,7 +5,6 @@ from .Liqui import Liqui
 from .Poloniex import Poloniex
 from .GDAX import GDAX
 from .Kraken import Kraken
-from .Kucoin import Kucoin
 
 from .Config import Config
 from .ExchangeException import ExchangeException
@@ -52,8 +51,6 @@ class API:
                     api = GDAX(key, secret, passphrase)
                 elif self.exchange.exchange.name == Config.KRAKEN:
                     api = Kraken(key, secret)
-                elif self.exchange.exchange.name == Config.KUCOIN:
-                    api = Kucoin(key, secret)
 
                 if api:
                     new_balances = api.getBalances()

@@ -28,29 +28,6 @@
         </div>
     </div>
 
-    {% if has_investment %}
-    <div class="row py-2">
-        <div class="col-md-4">
-            <label>
-              <b>Total {% if fiat_change >= 0 %}earnings{% else %}loss{% endif %}:
-                </b>
-            </label>
-        </div>
-        <div class="col-md-8">
-          <span>
-            {{ fiat_change|floatformat:-8 }} {{ fiat }}
-          </span>
-          ({% if fiat_change >= 0 %}
-          <span style="color: green">
-          {% else %}
-          <span style="color: red">
-          {% endif %}
-              {{ fiat_change_pct|floatformat:-2 }} %
-          </span>)
-        </div>
-    </div>
-    {% endif %}
-
     {% if other_balances %}
     <div class="row">
         <div class="col-md-4">
@@ -85,7 +62,7 @@
                 <tr>
                     <th>Currency</th>
                     <th>Amount</th>
-                    <th>Value in {{ fiat }}</th>
+                    <th>Amount in {{ fiat }}</th>
                 </tr>
             </thead>
             <tbody>

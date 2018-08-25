@@ -11,7 +11,7 @@ class Ripple:
                    '/v2/accounts/{}/balances'.format(address,))
         try:
             response = requests.get(req_url)
-            xrp_balance = next((item for item in response.json()['balances']
+            xrp_balance = next((item for item in response.json()['balances'] 
                                         if item["currency"] == "XRP"), None)
             return xrp_balance['value']
 

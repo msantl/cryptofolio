@@ -7,39 +7,24 @@ from django.db import models
 from encrypted_model_fields.fields import EncryptedCharField
 
 from .api.API import API
-from .api.Config import get_default_fiat_name
 from .api.BalanceFromAddress import BalanceFromAddress
-
-
-class Fiat(models.Model):
-    name = models.CharField(max_length=10, primary_key=True)
-
-    def __str__(self):
-        return "%s" % (self.name)
 
 
 class Currency(models.Model):
     name = models.CharField(max_length=10, primary_key=True)
+    crypto = models.BooleanField(default=False)
 
     def __str__(self):
-        return "%s" % (self.name)
+        return self.name
 
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    fiat = models.CharField(max_length=10, default=get_default_fiat_name())
+    fiat = models.CharField(max_length=10, default='USD')
 
     def __str__(self):
         return "%s %s" % (self.user, self.fiat)
 
-
-class Rates(models.Model):
-    crypto = models.ForeignKey(Currency, on_delete=models.PROTECT)
-    fiat = models.ForeignKey(Fiat, on_delete=models.PROTECT)
-    rate = models.FloatField(default=None, blank=True, null=True)
-
-    def __str__(self):
-        return "%s %s %s" % (self.crypto, self.fiat, self.rate)
 
 class Exchange(models.Model):
     name = models.CharField(max_length=100, primary_key=True)
@@ -74,7 +59,7 @@ class ExchangeBalance(models.Model):
     timestamp = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return "%s %s %s" % (
+        return "%s %s %s %s" % (
             self.exchange_account,
             self.currency,
             self.timestamp)
@@ -102,15 +87,6 @@ class AddressInput(models.Model):
         return "%s %s %s %s %s" % (self.user.username, self.timestamp,
                                    self.currency, self.address, self.amount)
 
-class Investment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    amount = models.FloatField(default=None, blank=True, null=True)
-    fiat = models.ForeignKey(Fiat, on_delete=models.PROTECT)
-    timestamp = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return "%s %s %s %s" % (self.user.username, self.amount, self.fiat.name,
-                                self.timestamp)
 
 class TimeSeries(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -210,46 +186,3 @@ def get_aggregated_balances(exchange_accounts, manual_inputs, address_inputs):
             crypto_balances[currency] = amount
 
     return crypto_balances
-
-
-def convert_to_fiat(crypto_balances, fiat):
-    balances = []
-    other_balances = []
-    rates = Rates.objects.filter(fiat=fiat)
-
-    # Manually handle glitches
-    name_conversions = { "MIOTA" : "IOTA" }
-
-    currency_to_rate = {}
-    for rate in rates:
-        currency_to_rate[rate.crypto.name] = rate.rate
-        if rate.crypto.name in name_conversions:
-            currency_to_rate[name_conversions[rate.crypto.name]] = rate.rate
-
-    for currency in crypto_balances:
-        if currency in currency_to_rate:
-            balances.append(
-                {
-                    'currency': currency,
-                    'amount': crypto_balances[currency],
-                    'amount_fiat':
-                        crypto_balances[currency] * currency_to_rate[currency]
-                }
-            )
-        elif currency == fiat:
-            balances.append(
-                {
-                    'currency': currency,
-                    'amount': crypto_balances[currency],
-                    'amount_fiat': crypto_balances[currency],
-                }
-            )
-        else:
-            other_balances.append(
-                {
-                    'currency': currency,
-                    'amount': crypto_balances[currency]
-                }
-            )
-
-    return (balances, other_balances)

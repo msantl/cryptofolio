@@ -32,7 +32,7 @@ class Kraken:
                 name = name_trimmed.upper()
                 value = float(balance[currency])
 
-                if value > Config.BALANCE_ZERO:
+                if value >= Config.BALANCE_ZERO:
                     balances[name] = value
 
             return balances

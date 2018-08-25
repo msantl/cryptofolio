@@ -141,13 +141,15 @@ This will create all the necessary tables in the database.
 Setting up a django superuser is not necessary, but it's convenient. You can do
 that with: `python manage.py createsuperuser`.
 
-To initialize FIAT and crypto currencies, you can run `python manage.py
-initialize` command that will load all available coins from `coinmarkertcap`,
-predefined FIAT currencies and supported exchanges, and write data to the
-database. You should run this command only once, on project initialization.
-
 Now you're ready to launch the app locally: `python manage.py runserver`
 The app should be served from `localhost:8000`.
+
+Open up the admin console at `localhost:8000/admin` and create new entries for
+`Currency` and `Exchange`. Those tables are used to list all supported FIAT
+and crypto currencies, and Exchanges. So go ahead and add `USD` and `EUR`
+with unchecked `crypto` checkbox, and `BTC`, `ETC`, `LTC` with checked `crypto`
+checkbox in `Currency` table, and `Binance`, `Bittrex`, `Coinbase`, `GDAX`,
+`Kraken`, `Liqui` and `Poloniex` in `Exchange` table.
 
 `TimeSeries` and `BalanceTimeSeries` tables are supposed to be populated by a
 cronjob that runs `python manage.py update_balances` every hour.

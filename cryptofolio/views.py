@@ -143,12 +143,13 @@ def home(request):
     if not exchange_accounts and not manual_inputs and not address_inputs:
         return render(request, 'home.html', {'has_data': False})
 
+    market = Coinmarket()
     crypto_balances = models.get_aggregated_balances(
         exchange_accounts, manual_inputs, address_inputs)
+    balances, other_balances = market.convertToFiat(crypto_balances, fiat)
 
-    balances, other_balances = models.convert_to_fiat(crypto_balances, fiat)
-    #balance_time_series = models.BalanceTimeSeries.objects.filter(
-    #    user=request.user, fiat=fiat).order_by('timestamp')
+#    balance_time_series = models.BalanceTimeSeries.objects.filter(
+#        user=request.user, fiat=fiat).order_by('timestamp')
 
     user_time_series = models.TimeSeries.objects.filter(
         user=request.user, fiat=fiat)
@@ -161,15 +162,6 @@ def home(request):
         else:
             balance['amount_fiat_pct'] = 100. * balance['amount_fiat'] / total_fiat
 
-    investments = models.Investment.objects.filter(user=request.user, fiat=fiat)
-    fiat_change = 0
-    fiat_change_pct = 0
-    has_investment = len(investments) > 0
-    if has_investment:
-        total_invested = sum(x.amount for x in investments)
-        fiat_change = total_fiat - total_invested
-        fiat_change_pct = 100 * fiat_change / total_invested
-
     return render(
         request,
         'home.html',
@@ -179,14 +171,9 @@ def home(request):
             'balances': balances,
             'other_balances': other_balances,
             'fiat_sum': total_fiat,
-
-            'has_investment': has_investment,
-            'fiat_change': fiat_change,
-            'fiat_change_pct': fiat_change_pct,
-
             'fiat_piechart': __get_fiat_piechart(balances, fiat),
             'time_series': __get_time_series_chart_old(user_time_series, fiat),
-            #'time_series': __get_time_series_chart(balance_time_series, fiat),
+            #            'time_series': __get_time_series_chart(balance_time_series, fiat),
         }
     )
 
@@ -514,47 +501,3 @@ def remove_address_input(request, address_input_id):
             request, 'There was an error removing address from your account!')
 
     return redirect('address_input')
-
-
-@login_required
-def investment_input(request):
-    investment = models.Investment(user=request.user)
-    investments = []
-
-    if request.method == 'POST':
-        form = forms.InvestmentForm(request.POST, instance=investment)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Investment added successfully!')
-            return redirect('investment_input')
-        else:
-            messages.warning(request, 'There was an error adding investment!')
-    else:
-        form = forms.InvestmentForm(instance=investment)
-        investments = models.Investment.objects.filter(user=request.user)
-
-    context = {
-        'form': form,
-        'investments': investments
-    }
-    return render(request, 'investment.html', context)
-
-
-@login_required
-def remove_investment_input(request, investment_input_id):
-    try:
-        investment = models.Investment.objects.filter(
-            user=request.user,
-            id=investment_input_id
-        )
-
-        investment.delete()
-        messages.success(request, 'Investment removed!')
-
-    except ObjectDoesNotExist:
-        messages.warning(
-            request, 'There was an error removing investment from your account!')
-
-    return redirect('investment_input')
-
-

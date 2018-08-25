@@ -27,7 +27,7 @@ class GDAX:
                 name = currency["currency"].upper()
                 value = float(currency["balance"])
 
-                if value > Config.BALANCE_ZERO:
+                if value >= Config.BALANCE_ZERO:
                     balances[name] = value
 
             return balances
