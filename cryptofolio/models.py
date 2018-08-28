@@ -187,6 +187,8 @@ def get_aggregated_balances(exchange_accounts, manual_inputs, address_inputs):
             currency = exchange_balance.currency
             amount = exchange_balance.amount
 
+            if amount is None:
+                continue
             if currency in crypto_balances:
                 crypto_balances[currency] += amount
             else:
@@ -196,6 +198,8 @@ def get_aggregated_balances(exchange_accounts, manual_inputs, address_inputs):
         currency = manual_input.currency
         amount = manual_input.amount
 
+        if amount is None:
+            continue
         if currency in crypto_balances:
             crypto_balances[currency] += amount
         else:
@@ -205,6 +209,8 @@ def get_aggregated_balances(exchange_accounts, manual_inputs, address_inputs):
         currency = address_input.currency
         amount = address_input.amount
 
+        if amount is None:
+            continue
         if currency in crypto_balances:
             crypto_balances[currency] += amount
         else:
@@ -229,14 +235,16 @@ def convert_to_fiat(crypto_balances, fiat):
 
     for currency in crypto_balances:
         if currency in currency_to_rate:
-            balances.append(
-                {
+            try:
+                balances.append({
                     'currency': currency,
                     'amount': crypto_balances[currency],
                     'amount_fiat':
                         crypto_balances[currency] * currency_to_rate[currency]
-                }
-            )
+                })
+            except TypeError as e:
+                pass
+
         elif currency == fiat:
             balances.append(
                 {
