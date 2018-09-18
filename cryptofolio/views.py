@@ -13,6 +13,7 @@ from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse_lazy
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404, resolve_url
@@ -21,6 +22,7 @@ from django.utils.http import is_safe_url
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
+
 
 from . import forms
 from . import models
@@ -323,6 +325,22 @@ def change_password(request):
         form = PasswordChangeForm(request.user)
 
     return render(request, 'change_password.html', {'form': form})
+
+
+@login_required
+def delete_account(request):
+    if request.method == 'POST':
+        form = forms.DeleteAccountForm(request.POST, instance=request.user)
+        if form.is_valid():
+            user = User.objects.get(id=request.user.id)
+            user.delete()
+            messages.success(
+                request, 'Your account was successfully deleted!')
+            return HttpResponseRedirect(reverse_lazy('logout'))
+    else:
+        form = forms.DeleteAccountForm(instance=request.user)
+
+    return render(request, 'delete_account.html', {'form': form})
 
 
 def handler404(request):

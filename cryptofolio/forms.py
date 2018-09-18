@@ -79,5 +79,14 @@ class InvestmentForm(forms.ModelForm):
 
     class Meta:
         model = models.Investment
-        fields = ('amount', 'fiat')
+        fields = ('amount', 'fiat', )
 
+
+class DeleteAccountForm(forms.ModelForm):
+    confirm = forms.BooleanField(
+            required=True,
+            help_text="Check this box if you are sure you want to delete your account.")
+
+    class Meta:
+        model = models.User
+        fields = ('confirm', )

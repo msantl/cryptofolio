@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Account{% endblock %}
+
+{% block content %}
+<div>
+    <div class="pt-2">
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                {% if form.confirm.errors %}
+                {% for error in form.confirm.errors %}
+                <div class="alert alert-danger" role="alert">
+                    {{ error|safe }}
+                </div>
+                {% endfor %}
+                {% endif %}
+                <div class="form-row">
+                    <div class="col-md-8">
+                        <div class="form-check form-check-inline">
+                            <label
+                                class="form-check-label"
+                                for="{{ form.confirm.id_for_label }}">
+                                <input
+                                    class="form-check-input"
+                                    type="checkbox"
+                                    id="{{ form.confirm.id_for_label }}"
+                                    name="{{ form.confirm.name }}"
+                                />
+                                {{ form.confirm.help_text|safe }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-danger">Submit</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+

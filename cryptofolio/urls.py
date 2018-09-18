@@ -44,6 +44,7 @@ urlpatterns = [
     url(r'^remove_balances/$', views.remove_balances, name='remove_balances'),
     url(r'^settings/details/$', views.change_details, name='details'),
     url(r'^settings/password/$', views.change_password, name='password'),
+    url(r'^settings/delete_account/$', views.delete_account, name='delete_account'),
     url(
         r'^settings/exchange/(?P<exchange_id>[0-9A-Za-z]+)/remove$',
         views.remove_exchange,
