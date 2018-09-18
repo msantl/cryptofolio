@@ -40,13 +40,14 @@ class Rates(models.Model):
     rate = models.FloatField(default=None, blank=True, null=True)
 
     def __str__(self):
-        return "%s %s %s" % (self.crypto, self.fiat, self.rate)
+        return "%s %s %s" % (self.currency, self.fiat, self.rate)
 
 class Exchange(models.Model):
     name = models.CharField(max_length=100, primary_key=True)
+    label = models.CharField(max_length=100, null=True)
 
     def __str__(self):
-        return self.name
+        return "%s %s" % (self.name, self.label)
 
 
 class ExchangeAccount(models.Model):
@@ -62,7 +63,7 @@ class ExchangeAccount(models.Model):
         help_text='<ul><li>Optional</li></ul>')
 
     def __str__(self):
-        return "%s %s" % (self.user.username, self.exchange.name)
+        return "%s %s" % (self.user.username, self.exchange.label)
 
 
 class ExchangeBalance(models.Model):

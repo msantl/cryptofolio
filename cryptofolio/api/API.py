@@ -1,11 +1,12 @@
 from .Binance import Binance
 from .Bittrex import Bittrex
 from .Coinbase import Coinbase
-from .Liqui import Liqui
-from .Poloniex import Poloniex
+from .CoinbasePro import CoinbasePro
 from .GDAX import GDAX
+from .Liqui import Liqui
 from .Kraken import Kraken
 from .Kucoin import Kucoin
+from .Poloniex import Poloniex
 
 from .Config import Config
 from .ExchangeException import ExchangeException
@@ -48,7 +49,7 @@ class API:
                     api = Liqui(key, secret)
                 elif self.exchange.exchange.name == Config.POLONIEX:
                     api = Poloniex(key, secret)
-                elif self.exchange.exchange.name == Config.GDAX:
+                elif self.exchange.exchange.name == Config.COINBASEPRO:
                     api = GDAX(key, secret, passphrase)
                 elif self.exchange.exchange.name == Config.KRAKEN:
                     api = Kraken(key, secret)

@@ -11,12 +11,7 @@ class Command(BaseCommand):
     help = "Import coin names from Coinmarketcap"
 
     def handle(self, *args, **options):
-        market = Coinmarket()
-        for name in market.getCoinNames():
-            coin, _ = Currency.objects.get_or_create(name=name)
-
-        for name in get_configured_fiat_names():
-            coin, _ = Fiat.objects.get_or_create(name=name)
-
         for name in get_configured_exchange_names():
-            exchange, _ = Exchange.objects.get_or_create(name=name, label=name)
+            exchange, _ = Exchange.objects.get_or_create(name=name)
+            exchange.label = name
+            exchange.save()

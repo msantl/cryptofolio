@@ -4,15 +4,15 @@ class Config:
     COINBASE="Coinbase"
     LIQUI="Liqui"
     POLONIEX="Poloniex"
-    GDAX="GDAX"
+    COINBASEPRO="GDAX"
     KRAKEN="Kraken"
     KUCOIN="Kucoin"
 
     BALANCE_ZERO=0.00000001
 
 def get_configured_exchange_names():
-        return [Config.BINANCE, Config.BITTREX, Config.COINBASE, Config.LIQUI,
-                Config.POLONIEX, Config.GDAX, Config.KRAKEN, Config.KUCOIN]
+    return [Config.BINANCE, Config.BITTREX, Config.COINBASE, Config.LIQUI,
+            Config.POLONIEX, Config.COINBASEPRO, Config.KRAKEN, Config.KUCOIN]
 
 def get_configured_fiat_names():
     return ["USD", "EUR", "GBP"]

@@ -200,8 +200,8 @@ def settings(request):
 
 
 @login_required
-def exchange(request, exchange_id):
-    exchange = get_object_or_404(models.Exchange, pk=exchange_id)
+def exchange(request, exchange_name):
+    exchange = get_object_or_404(models.Exchange, pk=exchange_name)
     exchange_balances = None
     stored_credentials = True
 
@@ -226,7 +226,7 @@ def exchange(request, exchange_id):
             else:
                 messages.success(request, 'Exchange updated successfully!')
 
-            return redirect('exchange', exchange_id=exchange)
+            return redirect('exchange', exchange_name=exchange.name)
         else:
             messages.warning(request, 'There was an error adding exchange!')
     else:

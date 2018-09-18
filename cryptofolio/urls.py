@@ -38,7 +38,7 @@ urlpatterns = [
     ),
     url(r'^signup/$', views.signup, name='signup'),
     url(r'^settings/$', views.settings, name='settings'),
-    url(r'^settings/exchange/(?P<exchange_id>[0-9A-Za-z]+)/$',
+    url(r'^settings/exchange/(?P<exchange_name>[0-9A-Za-z]+)/$',
         views.exchange, name='exchange'),
     url(r'^refresh_balances/$', views.refresh_balances, name='refresh_balances'),
     url(r'^remove_balances/$', views.remove_balances, name='remove_balances'),
@@ -46,7 +46,7 @@ urlpatterns = [
     url(r'^settings/password/$', views.change_password, name='password'),
     url(r'^settings/delete_account/$', views.delete_account, name='delete_account'),
     url(
-        r'^settings/exchange/(?P<exchange_id>[0-9A-Za-z]+)/remove$',
+        r'^settings/exchange/(?P<exchange_name>[0-9A-Za-z]+)/remove$',
         views.remove_exchange,
         name='remove_exchange'
     ),
