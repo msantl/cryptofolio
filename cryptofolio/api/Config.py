@@ -4,7 +4,7 @@ class Config:
     COINBASE="Coinbase"
     LIQUI="Liqui"
     POLONIEX="Poloniex"
-    COINBASEPRO="GDAX"
+    COINBASEPRO="CoinbasePro"
     KRAKEN="Kraken"
     KUCOIN="Kucoin"
 

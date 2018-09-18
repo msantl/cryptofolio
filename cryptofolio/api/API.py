@@ -2,7 +2,6 @@ from .Binance import Binance
 from .Bittrex import Bittrex
 from .Coinbase import Coinbase
 from .CoinbasePro import CoinbasePro
-from .GDAX import GDAX
 from .Liqui import Liqui
 from .Kraken import Kraken
 from .Kucoin import Kucoin
@@ -39,21 +38,21 @@ class API:
 
                 api = None
 
-                if self.exchange.exchange.name == Config.BINANCE:
+                if self.exchange.exchange.label == Config.BINANCE:
                     api = Binance(key, secret)
-                elif self.exchange.exchange.name == Config.BITTREX:
+                elif self.exchange.exchange.label == Config.BITTREX:
                     api = Bittrex(key, secret)
-                elif self.exchange.exchange.name == Config.COINBASE:
+                elif self.exchange.exchange.label == Config.COINBASE:
                     api = Coinbase(key, secret)
-                elif self.exchange.exchange.name == Config.LIQUI:
+                elif self.exchange.exchange.label == Config.LIQUI:
                     api = Liqui(key, secret)
-                elif self.exchange.exchange.name == Config.POLONIEX:
+                elif self.exchange.exchange.label == Config.POLONIEX:
                     api = Poloniex(key, secret)
-                elif self.exchange.exchange.name == Config.COINBASEPRO:
-                    api = GDAX(key, secret, passphrase)
-                elif self.exchange.exchange.name == Config.KRAKEN:
+                elif self.exchange.exchange.label == Config.COINBASEPRO:
+                    api = CoinbasePro(key, secret, passphrase)
+                elif self.exchange.exchange.label == Config.KRAKEN:
                     api = Kraken(key, secret)
-                elif self.exchange.exchange.name == Config.KUCOIN:
+                elif self.exchange.exchange.label == Config.KUCOIN:
                     api = Kucoin(key, secret)
 
                 if api:
@@ -65,7 +64,7 @@ class API:
                             balances[key] = new_balances[key]
                 else:
                     error = "Exchange %s is not defined!" % (
-                        self.exchange.exchange.name)
+                        self.exchange.exchange.label)
 
             except ExchangeException as e:
                 error = e.message
