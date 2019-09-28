@@ -153,7 +153,7 @@ def home(request):
     #    user=request.user, fiat=fiat).order_by('timestamp')
 
     user_time_series = models.TimeSeries.objects.filter(
-        user=request.user, fiat=fiat)
+            user=request.user, fiat=fiat)[::24]
 
     total_fiat = sum(x['amount_fiat'] for x in balances)
 
