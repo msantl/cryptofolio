@@ -1,7 +1,6 @@
 import json
 
 from django.conf import settings
-from coinmarketcap import Market
 from ratelimit import limits, sleep_and_retry
 from requests import Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
