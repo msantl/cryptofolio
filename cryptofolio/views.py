@@ -35,11 +35,12 @@ import itertools
 
 
 def __get_fiat_piechart(balances, fiat):
+    EPS = 0.009
     return {
         'charttype': "pieChart",
         'chartdata': {
-            'x': [x['currency'] for x in balances],
-            'y1': [x['amount_fiat'] for x in balances],
+            'x': [x['currency'] for x in balances if x['amount_fiat'] > EPS],
+            'y1': [x['amount_fiat'] for x in balances if x['amount_fiat'] > EPS],
             'extra1': {
                 "tooltip": {
                     "y_start": "",
