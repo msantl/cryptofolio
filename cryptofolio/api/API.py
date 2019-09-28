@@ -2,7 +2,6 @@ from .Binance import Binance
 from .Bittrex import Bittrex
 from .Coinbase import Coinbase
 from .CoinbasePro import CoinbasePro
-from .Liqui import Liqui
 from .Kraken import Kraken
 from .Kucoin import Kucoin
 from .Poloniex import Poloniex
@@ -44,8 +43,6 @@ class API:
                     api = Bittrex(key, secret)
                 elif self.exchange.exchange.label == Config.COINBASE:
                     api = Coinbase(key, secret)
-                elif self.exchange.exchange.label == Config.LIQUI:
-                    api = Liqui(key, secret)
                 elif self.exchange.exchange.label == Config.POLONIEX:
                     api = Poloniex(key, secret)
                 elif self.exchange.exchange.label == Config.COINBASEPRO:

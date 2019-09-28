@@ -111,6 +111,9 @@ requests you need to create an accont and obtain an API key.
 * `blockchain.info` to get balance for a BTC address. If you want to send API
 requests you need to create an accont and obtain an API key.
 
+* `coinmarkertcap` to get the current listings. If you want to be able to use
+Coinmarketcap pro api, create an account and obtain an API key.
+
 Environment variables:
 * `SECRET_KEY`
 * `SENDGRID_API_KEY`
@@ -122,6 +125,7 @@ Environment variables:
 * `DB_PORT`
 * `SENTRY_DSN`
 * `ETHERSCAN_API_KEY`
+* `COINMARKET_API_KEY`
 
 Once you've set up those variables you can start setting up some base project
 settings.

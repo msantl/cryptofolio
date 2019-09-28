@@ -1,4 +1,4 @@
-from bittrex import Bittrex as Client
+from bittrex.bittrex import Bittrex as Client, API_V1_1 as Version
 
 from .Config import Config
 from .Logger import Logger
@@ -10,7 +10,7 @@ class Bittrex:
         self.logger = Logger(__name__)
 
         try:
-            self.client = Client(key, secret, api_version="v2.0")
+            self.client = Client(key, secret, api_version=Version)
         except Exception as e:
             self.logger.log(e)
             raise ExchangeException(self.__class__.__name__, e)
@@ -24,8 +24,8 @@ class Bittrex:
                 raise Exception(result['message'])
 
             for currency in result["result"]:
-                name = currency["Currency"]["Currency"]
-                value = currency["Balance"]["Balance"]
+                name = currency["Currency"]
+                value = currency["Balance"]
 
                 if value > Config.BALANCE_ZERO:
                     balances[name] = value

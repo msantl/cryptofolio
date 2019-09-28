@@ -89,6 +89,9 @@ DEFAULT_FROM_EMAIL = 'no-reply@cryptofol.io'
 SERVER_EMAIL = 'system@cryptofol.io'
 SENDGRID_API_KEY = os.environ['SENDGRID_API_KEY']
 
+# coinmarket api pro key
+COINMARKET_API_KEY = os.environ['COINMARKET_API_KEY']
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

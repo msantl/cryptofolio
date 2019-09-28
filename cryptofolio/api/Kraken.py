@@ -24,6 +24,9 @@ class Kraken:
             if len(error) > 0:
                 raise Exception(', '.join(error))
 
+            if 'result' not in result:
+                return balances
+
             balance = result['result']
             for currency in balance:
                 # remove first symbol ('Z' or 'X')

@@ -27,7 +27,6 @@ from django.views.decorators.debug import sensitive_post_parameters
 from . import forms
 from . import models
 
-from .api.Coinmarket import Coinmarket
 from .api.BalanceFromAddress import BalanceFromAddress
 
 import time
@@ -367,8 +366,8 @@ def refresh_balances(request):
 
 
 @login_required
-def remove_exchange(request, exchange_id):
-    exchange = get_object_or_404(models.Exchange, pk=exchange_id)
+def remove_exchange(request, exchange_name):
+    exchange = get_object_or_404(models.Exchange, pk=exchange_name)
 
     try:
         exchange_account = models.ExchangeAccount.objects.get(
@@ -383,7 +382,7 @@ def remove_exchange(request, exchange_id):
         messages.warning(
             request, 'There was an error removing exchange from your account!')
 
-    return redirect('exchange', exchange_id=exchange_id)
+    return redirect('exchange', exchange_name=exchange_name)
 
 
 @login_required

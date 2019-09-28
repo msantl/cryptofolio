@@ -2,7 +2,6 @@ class Config:
     BINANCE="Binance"
     BITTREX="Bittrex"
     COINBASE="Coinbase"
-    LIQUI="Liqui"
     POLONIEX="Poloniex"
     COINBASEPRO="CoinbasePro"
     KRAKEN="Kraken"
@@ -11,8 +10,8 @@ class Config:
     BALANCE_ZERO=0.00000001
 
 def get_configured_exchange_names():
-    return [Config.BINANCE, Config.BITTREX, Config.COINBASE, Config.LIQUI,
-            Config.POLONIEX, Config.COINBASEPRO, Config.KRAKEN, Config.KUCOIN]
+    return [Config.BINANCE, Config.BITTREX, Config.COINBASE, Config.POLONIEX,
+            Config.COINBASEPRO, Config.KRAKEN, Config.KUCOIN]
 
 def get_configured_fiat_names():
     return ["USD", "EUR", "GBP"]
