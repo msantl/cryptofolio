@@ -18,11 +18,17 @@ from cryptofolio.models import (
     update_address_input_balances)
 from cryptofolio.api.Coinmarket import Coinmarket
 
+import datetime
+
 
 class Command(BaseCommand):
     help = "Updates balances for all users on all exchanges"
 
     def handle(self, *args, **options):
+        # We only want to do this every other hour
+        if datetime.datetime.now().hour % 2 == 0:
+            return
+
         users = User.objects.all()
         market = Coinmarket()
 
