@@ -58,7 +58,7 @@ service-identity==17.0.0
 signals==0.0.2
 six==1.10.0
 sortedcontainers==2.0.5
-Twisted==17.9.0
+Twisted==19.7.0
 txaio==2.8.2
 tzlocal==1.5.1
 Unidecode==0.4.21
