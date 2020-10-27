@@ -9,7 +9,7 @@ cffi==1.11.2
 chardet==3.0.4
 coinbase==2.1.0
 constantly==15.1.0
-cryptography==2.1.3
+cryptography==3.2
 dateparser==0.7.0
 Django==1.11.23
 django-bootstrap-ui==0.5.1
