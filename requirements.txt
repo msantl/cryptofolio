@@ -4,7 +4,7 @@ autobahn==17.10.1
 Automat==0.6.0
 bintrees==2.0.7
 cbpro==1.1.4
-certifi==2017.11.5
+certifi==2022.12.7
 cffi==1.11.2
 chardet==3.0.4
 coinbase==2.1.0
